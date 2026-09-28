@@ -2,6 +2,50 @@
 
 Paikallinen suunnitteluloki. Nämä päätökset eivät ole GitHub-portin hyväksyntöjä. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-28 - PRD-luonnoksen laajuus ja priorisointi
+- **Decision:** PRD 0.1 kuvaa vain käyttäjän vahvistaman suljetun paikallisen MVP:n. Kaikki kahdeksan toiminnallista ja neljä laatua koskevaa vaatimusta ovat Must, koska kukin osallistuu välttämättömään kolmen toiminnon, kertymän eheyden tai testin eristämisen kokonaisuuteen; uusia Should/Could-toimintoja ei oleteta. Tuotantohyväksyntä, todellinen ihmisyyden todennus, Entra-tuotantointegraatio ja vanha historia pysyvät tämän toimituksen ulkopuolella.
+- **Rationale:** Prioriteetit ilmaisevat tämän toimituksen vähimmäisrajan, eivät arvioita tulevista ominaisuuksista. PRD:n avoimet tekniset ja hallinnolliset päätökset kirjataan addendumiin arkkitehtuuria varten.
+- **Impact:** Luotu `prd.md` ja `addendum.md` luonnoksina. PRD-aloitusportin läpäisy ei ole PRD:n hyväksyntä; erillinen suojattu, riippumattomasti arvioitu ja yhdistetty PR vaaditaan ennen arkkitehtuurivaihetta. Lukitun tilakysely- ja JWT-oletuksen poikkeamat vaativat hyväksytyn ADR:n ennen kehitystä.
+- **Made by:** Product, käyttäjän vahvistaman QG1-rajauspäätöksen pohjalta
+- **Source:** [PRD](prd.md), [addendum](addendum.md), [QG1-muistio](qg1-feature-readiness.md)
+
+### 2026-09-28 - QG1-tarkennus: paikallinen testidata ja profiiliraja
+- **Decision:** Käyttäjä vahvisti, että asiakas- ja palautustiedot syntyvät vain palvelun paikallisista testipyynnöistä. Hyväksyntäsimulaatio toimii vain eksplisiittisessä paikallisessa testiprofiilissa ja on estetty muissa profiileissa. Onnistuminen osoitetaan sääntöjen ja rajauksen automaattisilla testeillä sekä Seppo Sutisen manuaalisesti hyväksymällä demolla.
+- **Rationale:** Rajaa paikallisen testin datan ja identiteettisimulaation erilleen todellisista palautuksista; tarkka tekninen toteutus päätetään arkkitehtuurissa.
+- **Impact:** Täsmennetään paikallisen MVP:n esiehdot ja hyväksymiskriteerit. Ei tuotantokäyttöä eikä muutosta GitHubin vaiheportteihin; demoarviota ei ole vielä annettu.
+- **Made by:** käyttäjä, QG1-uudelleenarvioinnin jälkeinen vahvistus
+- **Source:** [QG1-muistio](qg1-feature-readiness.md)
+
+### 2026-09-28 - Paikallisen MVP:n hyväksyntänäyttö
+- **Decision:** Käyttäjä valitsi automaattiset testit ja niiden lisäksi Seppo Sutisen hyväksymän manuaalisen demon paikallisen MVP:n hyväksymistavaksi. Muita lähdedokumentteja tai päätösomistajia ei käyttäjän mukaan tunneta.
+- **Rationale:** Paikallisen simulaation toiminta ja rajaus pitää osoittaa ennen valmistumisen toteamista; demoarviota ei ole vielä annettu. Automaattisten testien ja demon tarkempi sisältö täsmennetään hyväksymiskriteereissä.
+- **Impact:** Täsmennetään PRD:n paikalliset hyväksymiskriteerit; ei tuotantohyväksyntää eikä muutosta GitHubin vaiheportteihin.
+- **Made by:** käyttäjä, paikallinen QG1-tarkennus
+- **Source:** [QG1-muistio](qg1-feature-readiness.md)
+
+### 2026-09-28 - Course Correction: paikallinen MVP ilman tuotantohyväksyntää
+- **Decision:** Käyttäjä rajasi tämän toimituksen suljettuun paikalliseen MVP:hen, jossa hyväksyntä simuloidaan testitokenilla. Tuotantohyväksyntä, Entra ID -tokenin varmennus ja luonnollisen henkilön hyväksynnän todennus kuuluvat erilliseen myöhempään toimitukseen. Paikallista simulaatiota ei saa käyttää tuotannossa.
+- **Rationale:** Aiempi tuotantotavoite ei ole tämän toimituksen käytettävissä olevilla lähtötiedoilla osoitettavissa. Käyttäjä valitsi paikallisen MVP:n ja vahvisti laajuusmuutoksen vaikutusarvion erikseen.
+- **Impact:** PRD:tä, epicejä, tarinoita tai sprint-status.yaml-tiedostoa ei vielä ole; niitä ei muuteta. Päivitetään QG1:n ja projektikontekstin toimitusrajaus ennen PRD:tä. Muut liiketoimintasäännöt säilyvät.
+- **In-progress stories affected:** ei yhtään
+- **Made by:** käyttäjä; bmad-correct-course, paikallinen suunnittelupäätös
+- **Source:** [QG1-muistio](qg1-feature-readiness.md)
+- **Supersedes:** alla olevan tuotannon henkilötodennuksen tähän toimitukseen sijoittavan päätöksen ja muiden tuotannon tämän toimituksen tavoitteena pitävien kirjausten soveltamisen; niiden historia säilyy
+
+### 2026-09-28 - Ilmoitettu Entra ID -myöntäjä ja Rovo-lähteen vahvistus
+- **Decision:** Käyttäjä nimesi Azure Entra ID:n tuotantotokenin myöntäjäksi, toisti IAM:n liittävän hyväksymisen ryhmäoikeuden vain luonnolliselle henkilölle ja vahvisti Rovo-snapshotin lähde-URL:n sekä poiminta-ajan oikeiksi. Käyttäjän mukaan Entra ID:n käyttöä ei tarvitse erikseen varmistaa. Nämä ovat paikallisia lähtötietoja, eivät tuotantokontrollien tai vaiheportin hyväksyntä.
+- **Rationale:** JWT:n hyväksyttävää `iss`- ja `aud`-arvoa, allekirjoitusavainten soveltuvuutta, delegoidun käyttäjätokenin ja sovellustokenin erottelua tai IAM-oikeuden myöntö- ja valvontakontrollia ei toimitettu tarkistettavaksi. Rovo-metatietoja ei ole tarkistettu ulkoisesta lähteestä. Tuotantohyväksynnän esto säilyy.
+- **Made by:** käyttäjä, paikallinen QG1-tarkennus
+- **Source:** [QG1-muistio](qg1-feature-readiness.md)
+- **Supersedes:** alla olevien tuotantotokenin myöntäjää ja Rovo-metatietojen käyttäjävahvistusta koskevien avoimien kysymysten tila; varmennusvaatimukset säilyvät
+
+### 2026-09-28 - Tuotannon avainlähteen ja IAM-ryhmäoikeuden tarkennus
+- **Decision:** Käyttäjän mukaan `TENANT_ID`, `APP_ID`, `iss` ja `aud` annetaan ympäristökohtaisina parametreina. Tuotannon julkisten avainten osoite ehdotetaan muodostettavaksi muodossa `https://login.microsoftonline.com/{TENANT_ID}/discovery/keys?appid={APP_ID}`. Asiakkaan IAM liittää hyväksymiseen oikeuttavan ryhmäoikeuden vain oikealle henkilölle. Tämä on suunnittelun liiketoimintaoletus, ei muodollinen vaihehyväksyntä.
+- **Rationale:** Käyttäjä on täsmentänyt aiemmin avoimen avainlähteen muodostustavan ja roolihallinnan toimintatavan. `iss`- ja `aud`-arvoja, tokeniin soveltuvaa avainlähdettä, ryhmäoikeuden välittymistä käyttäjätokeniin tai sovellustokenien poissulkua ei ole vielä varmennettu; tuotantohyväksynnän esto säilyy siihen asti.
+- **Made by:** käyttäjä, paikallinen QG1-tarkennus
+- **Source:** [QG1-muistio](qg1-feature-readiness.md)
+- **Supersedes:** alla olevan IAM-roolihallintamerkinnän avainlähteen muodostustapaa koskevan avoimuuden; muut varmennusvaatimukset säilyvät
+
 ### 2026-09-28 - Ehdotus erilliseksi paikalliseksi toimituspäätökseksi
 - **Status:** Ehdotus, ei voimassa oleva porttihyväksyntä.
 - **Decision:** Käyttäjä haluaa jatkaa ilman GitHub-repoa erillisellä päätöksellä. Ehdotettu muutos on määritellä paikallinen suunnittelun tarkistus- ja hyväksyntämenettely ennen PRD:n aloittamista sekä erottaa luonnokset hyväksytyistä artefakteista. Nykyinen GitHub-portti on edelleen voimassa; epäonnistunutta `check testcase01 prd` -tarkistusta ei korvata tällä kirjauksella.
