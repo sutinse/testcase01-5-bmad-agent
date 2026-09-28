@@ -1,0 +1,11 @@
+schemaVersion: 1
+feature: testcase01
+stage: architecture
+action: approved
+pr: 5
+headSha: 4c8974531bf9aeba3958e820229d85e62c5a54e7
+mergeSha: 892c9d917b8fa397e69aa0dd63099ed2bb2da9ea
+reviewer: sutinse1
+approvedAt: '2026-09-28T17:00:18Z'
+artifacts:
+  bmad-output/testcase01/architecture.md: b8c863b8bbed027c39734f8644cab733fedca16372492ed907e44fdb6476b204
