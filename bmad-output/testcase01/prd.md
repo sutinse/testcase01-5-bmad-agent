@@ -9,6 +9,8 @@
 
 Lähteet: [Rovo-snapshot](input/rovo-feature.md), [QG1-uudelleenarviointi](qg1-feature-readiness.md), [projektikonteksti](project-context.md) ja [päätösloki](decision-log.md). Rovo-lähteen URL ja poiminta-aika ovat käyttäjän vahvistamia, eivät ulkoisesti todennettuja. Tässä PRD:ssä kuvataan vain suljettu paikallinen MVP; tuotantokelpoisuutta ei väitetä.
 
+PRD-vaiheen GitHub-portti edellyttää sekä tämän PRD:n että lähdesnapshotin katselmointia samassa PR:ssä; lähdesnapshotin alkuperäinen kuvausteksti säilyy muuttumattomana.
+
 ## Executive Summary
 
 **Problem Statement:** Yksittäisen palautuksen 10 000 EUR raja ei yksin huomaa saman asiakkaan useita pienempiä vakuutusmaksupalautuksia. Esimerkiksi kaksi 6 000 EUR palautusta voi ylittää asiakkaan kokonaisrajan, jolloin hyväksynnän erottaminen käsittelystä on tarpeen.
