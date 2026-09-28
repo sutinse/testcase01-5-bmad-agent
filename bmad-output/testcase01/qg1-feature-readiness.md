@@ -1,6 +1,6 @@
 # QG1: testcase01
 
-Paikallinen arviointi, ei GitHub-portin hyväksyntä. Arvioitu vain [Rovo-snapshotin](input/rovo-feature.md) ja [QG1-rubriikin](../../docs/qg1/feature-readiness.md) perusteella sekä käyttäjän tässä arvioinnissa antamilla tarkennuksilla. Snapshotin lähde-URL:n ja poiminta-ajan oikeellisuutta ei ole varmennettu ulkoisesta järjestelmästä.
+Paikallinen arviointi, ei GitHub-portin hyväksyntä. Arvioitu vain [Rovo-snapshotin](input/rovo-feature.md) ja [QG1-rubriikin](../../docs/qg1/feature-readiness.md) perusteella sekä käyttäjän tässä arvioinnissa antamilla tarkennuksilla. Käyttäjä vahvisti snapshotin lähde-URL:n ja poiminta-ajan oikeiksi; niitä ei ole varmennettu ulkoisesta järjestelmästä.
 
 ## Alkuperäisen kuvauksen kartoitus
 
@@ -37,6 +37,37 @@ Pisteet kuvaavat raakaa snapshotia **ennen** tarkennusvastauksia. Arvio ja riski
 | C2 Ei estäviä kysymyksiä | No | 0/2 | 15 % | 0 | Kumuloinnin ja valuutan päätökset voivat muuttaa perussääntöä. |
 
 **Yhteensä 42,5/100: NOT_READY_MAJOR_GAPS.** C2:n avoimet peruspäätökset estävät vihreän arvion. Tämä on lähtöaineiston pistemäärä, ei uudelleenlaskettu tulos tarkennusten jälkeen.
+
+## Tarkennetun paikallisen MVP:n QG1-uudelleenarviointi (2026-09-28)
+
+Tämä arvio perustuu yllä olevaan [Rovo-snapshotiin](input/rovo-feature.md), tämän muistion käyttäjän vahvistamiin tarkennuksiin ja [projektikontekstiin](project-context.md). Käyttäjä vahvisti uuden kartoituksen, pistetulkinnan ja riskihuomion erikseen. Alkuperäinen 42,5/100 arvio koskee vain muuttamatonta lähtöaineistoa; tätä arviota ei tule käyttää tuotantovalmiuden tai GitHub-vaiheportin hyväksyntänä.
+
+| Artefakti | Tarkennettu kartoitus ja lähde |
+| --- | --- |
+| Toiminto ja odotettu tulos | Käsittelijän lähetys, erillinen päätös ja tilakysely; vain paikallisen MVP:n sääntöjen ja rajauksen osoittaminen [käyttäjän vahvistamat tarkennukset, projektikonteksti]. Tuotannon todellinen henkilötodennus ei sisälly toimitukseen. |
+| Ongelma ja hyöty | Kaksi erillistä 6 000 euron palautusta voi ohittaa yksittäisen palautuksen rajan ja herättää rahanpesuhuolen [Rovo-snapshot]. Vaikutusta todelliseen maksatukseen ei mitata tässä paikallisessa toimituksessa. |
+| Hyväksymiskriteerit ja rajaus | Yli 10 000 EUR saman asiakkaan 365 vuorokauden kertymässä johtaa `PENDING`-tilaan; kolme erillistä toimintoa, päättävät tilat, uusinnat, roolit, EUR-raja ja paikallinen testiympäristö ovat kirjattuja [käyttäjän tarkennukset, projektikonteksti]. Luonnollisen henkilön todennus on myöhemmän toimituksen asia. |
+| Esiehdot ja riippuvuudet | SQLite tallentaa vain tämän palvelun kautta syntyvät palautukset; vanhaa historiaa ei tuoda [käyttäjän tarkennukset]. Paikallisen tokenin roolikartoituksen, testiavainparin hallinnan ja atomisen tallennuksen ratkaisut odottavat suunnittelua [projektikonteksti]. Muita lähteitä tai omistajia ei tunneta. |
+| Tukidokumentit ja esteet | Rovo-snapshot, paikallinen QG1-muistio, päätösloki ja projektikonteksti löytyvät tästä työtilasta; riippumattomat politiikka- ja datalähteet ovat Unknown. Lukittujen käyttöoikeuspäätösten ristiriita vaatii hyväksytyn suunnitteluratkaisun ennen kehitystä, ei ennen paikallisen MVP:n jatkojalostusta [projektikonteksti]. |
+
+| Kriteeri | Arvio | Pisteet | Paino | Osuus | Perustelu |
+| --- | --- | ---: | ---: | ---: | --- |
+| A1 Odotettu tulos | Partial | 1/2 | 15 % | 7,5 | Paikalliset testit ja demo ovat todennettavia, mutta liiketoimintavaikutus jää erilleen simulaatiosta. |
+| A2 Ongelma | Partial | 1/2 | 10 % | 5 | Kahden 6 000 EUR palautuksen ohitusriski tunnetaan, mutta vaikutus ja vaikutuksen kohteet jäävät ohuiksi. |
+| A3 Hyväksymiskriteerit | Yes | 2/2 | 20 % | 20 | Raja, UTC-ikkuna, tilat, uusinnat ja oikeudet kattavat olennaiset paikalliset virta- ja rajatapaukset. |
+| A4 Esiehdot | Partial | 1/2 | 5 % | 2,5 | Oma SQLite ja historian poisjättö tunnetaan; paikallisen testidatan ja käyttörajauksen tarkennus saatiin vasta pisteytyksen jälkeen. |
+| B1 Rajaus | Yes | 2/2 | 15 % | 15 | Paikallinen simulaatio ja tuotantohyväksynnän poisrajaus ovat eksplisiittisiä. |
+| B2 Riippuvuudet | Partial | 1/2 | 20 % | 10 | Testitoken, tallennus ja päätösristiriidat on nimetty, mutta toteutustapa ja usean riippuvuuden omistajuus ovat avoinna. |
+| B3 Liitedokumentit | Partial | 1/2 | 5 % | 2,5 | Paikalliset päätös- ja lähtödokumentit ovat löydettävissä; riippumattomia tukilähteitä ei tunneta. |
+| C2 Ei estäviä kysymyksiä | Yes | 2/2 | 15 % | 15 | Tuotannon identiteettikontrollit on siirretty myöhemmäksi; avoimet tekniset ratkaisut kuuluvat paikallisen MVP:n suunnitteluun ennen kehitystä. |
+
+**Yhteensä 77,5/100: NEEDS_MINOR_CLARIFICATION.** Pisteytys koskee käyttäjän vahvistamaa kartoitusta ennen alla olevia viimeisiä täsmennyksiä; niitä ei laskettu takautuvasti uuteen numeroon. Jatkojalostus on mahdollinen, mutta tämä ei ole tuotanto- eikä vaihehyväksyntä.
+
+**Kokonaisriskihuomio: HIGH.** Historiatiedon poisjättö voi aliarvioida todellisen 365 päivän kertymän (A4, B2); hylättyjen palautusten mukaanlaskenta voi nostaa kertymää ilman maksua (A3, B2); testitokenin hyväksyntä paikallisen testiprofiilin ulkopuolella rikkoisi tuotantorajauksen (A3, B1, B2). Käyttäjä ilmoitti Seppo Sutisen hyväksyneen kaksi laskentariskiä paikallisesti; tämä ei ole varmennettu muodollinen hyväksyntä. Pidä simulaatio estettynä muiden profiilien käytössä.
+
+Pisteytyksen jälkeiset käyttäjän vahvistamat vastaukset: testin asiakas- ja palautustiedot syntyvät vain tämän palvelun testipyynnöistä; simulaatio voidaan käynnistää vain eksplisiittisessä paikallisessa testiprofiilissa ja hyväksyntä estetään muissa profiileissa; paikallisen MVP:n onnistuminen osoitetaan sääntöjen ja rajauksen automaattisilla testeillä sekä Seppo Sutisen manuaalisesti hyväksymällä demolla. Demon hyväksyntää ei ole vielä saatu. Näiden ratkaisujen tekninen toteutus täsmentyy arkkitehtuurissa.
+
+**Välittömät toimet:** Kuvaa PRD:ssä paikallisen testiprofiilin fail-closed-raja ja kolmen toiminnon testi- ja demokriteerit (A3, B1, B2). Päätä arkkitehtuurissa roolikartoitus, avainhallinta ja transaktioraja; korjaa ristiriitaiset lukitut käyttöoikeusohjeet hyväksytyllä päätöksellä ennen kehitystä (A4, B2). Pidä muut tukidokumentit ja päätösomistajat Unknown-tilassa, kunnes näyttöä on saatavilla (B3). Tuotannon ihmisyystodennus ja Entra-varmennus pysyvät myöhemmän toimituksen kysymyksinä (B1, C2).
 
 ## Riskit ja päätökset
 
@@ -92,13 +123,20 @@ Vielä täsmennettävä: miten rinnakkaiset lähetykset ja päätökset suojataa
 - Käyttäjä valitsi paikallisen jatkosuunnittelun poluksi BMad Methodin (PRD ja arkkitehtuuri). Käyttäjä nimesi Seppo Sutisen käyttöönottoa edeltävän historian poisjätön ja hylättyjen palautusten mukaanlaskennan riskien päätösomistajaksi.
 - Käyttäjän ilmoituksen mukaan Seppo Sutinen hyväksyy paikallisena liiketoimintapäätöksenä molemmat nimetyt laskentariskit: laskenta alkaa ilman vanhaa historiaa, ja lopullisesti hylätyt palautukset kasvattavat kertymää. Tämä ei todenna päätösomistajan henkilöllisyyttä eikä ole muodollinen vaihehyväksyntä.
 - Käyttäjä valitsi JWT:n allekirjoituksen, myöntäjän, yleisön ja voimassaolon validoinnin palvelun vastuulle. Hän tarkensi, että paikallisen MVP:n ajossa käytetään testiluokan luomaa tokenia, ympäristömuuttujilla määriteltyjä hyväksyttyjä arvoja ja konfiguroitua testiavaimen julkista vastinetta. Aiempi valinta käyttää Entra JWKS -rajapintaa ei koske paikallista MVP:tä; tuotannon varmennustapa on päätettävä tämän toimituksen aikana. Palvelun oma validointi poikkeaa työtilan oletuksesta valmiiksi validoidusta JWT:stä; lukittu päätös on päivitettävä ennen toteutusta.
+- Käyttäjän uuden tarkennuksen mukaan tuotanto- ja testiympäristöjen `TENANT_ID` ja `APP_ID` tulevat ympäristöparametreista; ehdotettu julkisten avainten osoite rakennetaan muodossa `https://login.microsoftonline.com/{TENANT_ID}/discovery/keys?appid={APP_ID}`. Käyttäjä ilmoitti myös, että `iss` ja `aud` annetaan ympäristöparametreissa, mutta niiden arvoja tai varmennettavaa konfiguraatiota ei toimitettu. Osoitteen vastaavuutta käytettyyn tokeniin ei ole tarkistettu; paikallisen MVP:n testiavaimen rajaus säilyy.
+- Käyttäjän vahvistaman toimintatavan mukaan asiakkaan IAM liittää hyväksymiseen oikeuttavan ryhmäoikeuden vain oikealle henkilölle. Tämä on hyväksytty suunnittelun liiketoimintaoletukseksi, ei todennetuksi tokenin ihmisyysväitteeksi: ryhmäoikeuden välittyminen hyväksyttyyn käyttäjätokeniin, sovellustokenien poissulku ja tuotantokonfiguraation varmennus on määriteltävä ennen tuotantohyväksyntää.
+- Käyttäjä nimesi nyt Azure Entra ID:n tuotantotokenin myöntäjäksi ja ilmoitti, ettei sen käyttöä tarvitse hänen mielestään varmistaa erikseen. Tämä täsmentää myöntäjän suunnitteluoletusta mutta ei todenna juuri tämän palvelun hyväksymän tokenin `iss`- ja `aud`-arvoja, allekirjoitusavainta tai käyttäjä- ja sovellustokenien erottelua; palvelun tuotantovarmennus pysyy avoimena.
+- Käyttäjä toisti, että IAM lisää hyväksynnän oikeuttavan ryhmäoikeuden vain luonnolliselle henkilölle. Kontrollin dokumenttia, omistajaa, valvontaa tai tokenin väitteiden ja roolin kartoitusta ei toimitettu; ilmoitusta ei tulkita tuotannon ihmisyysvaatimuksen tekniseksi näytöksi.
+- Käyttäjä muutti toimituksen rajausta ja vahvisti vaikutuksen: tämä toimitus on vain paikallinen suljettu MVP, jossa hyväksyntä simuloidaan testitokenilla. Tuotantohyväksyntä, Entra ID -tokenin varmennus ja luonnollisen henkilön todennettava hyväksyntä siirtyvät erilliseen myöhempään toimitukseen. Paikallista simulaatiota ei saa käyttää tuotannossa eikä esittää alkuperäisen ihmisyysvaatimuksen tuotantokelpoisena toteutuksena. Aiempi tämän toimituksen tuotantotavoite ei enää ole voimassa; muita QG1:n liiketoimintasääntöjä ei muuteta.
+- Käyttäjä valitsi paikallisen MVP:n hyväksymistavaksi automaattiset testit ja niiden lisäksi manuaalisen demon hyväksynnän. Hän nimesi demon hyväksyjäksi Seppo Sutisen. Demon hyväksyntää tai hyväksyjän henkilöllisyyttä ei ole vielä todennettu. Muita tämän MVP:n lähdedokumentteja tai päätösomistajia ei käyttäjän mukaan ole tiedossa; niiden tila on Unknown.
 
 Nämä ovat käyttäjän vahvistamia uusia rajauksia; ne eivät muuta alkuperäisen Rovo-tekstin 42,5/100-lähtöpisteytystä.
 
 ## Seuraavat toimet
 
 - Suunnittele UTC-aikaleimaan perustuvan 365 vuorokauden ikkunan atominen tallennusjärjestys ja kilpailutilanteiden suojaus rinnakkaisissa lähetyksissä; säilytä käyttäjän ilmoittama riskikanta ja sen vaikutukset näkyvissä myöhemmässä suunnittelussa (B2, C2).
-- Täsmennä ympäristömuuttujien nimet ja arvonhankinta, testiavainparin hallinta ja roolikartoitus. Yksilöi IAM:n ja Entra ID:n välinen roolien hallintaketju, henkilökohtaisen hyväksyjäroolin myöntökontrollin dokumentti ja omistaja. Nimeä erikseen tuotantotokenin todellinen myöntäjä, `iss`-arvo, julkisten allekirjoitusavainten lähde ja hyväksytyt väitteet; varmista, miten palvelu hyväksyy vain henkilökohtaiset käyttäjätokenit. `sub` ja rooli eivät yksin riitä ihmisyyden todentamiseen. Sovita aiemmin myöhemmäksi siirretty Entra-varmennus tämän toimituksen tuotantotavoitteeseen ja pidä hyväksyntä estettynä ratkaisuun asti (A3, B2).
+- Täsmennä paikallisen MVP:n ympäristömuuttujien nimet ja arvonhankinta, testiavainparin hallinta ja roolikartoitus. Rajaa testiavaimen käyttö suljettuun paikalliseen ympäristöön. Myöhemmän tuotantotoimituksen lähtötiedoiksi tarvitaan IAM:n ja ilmoitetun Entra ID -myöntäjän roolien hallintaketju, henkilökohtaisen hyväksyjäoikeuden myöntökontrollin dokumentti ja omistaja, tuotantotokenin varmennetut `iss`- ja `aud`-arvot sekä allekirjoitusavainten lähde ja hyväksytyt väitteet. `sub` ja rooli eivät yksin riitä ihmisyyden todentamiseen; pidä hyväksyntä estettynä paikallisen simulaation ulkopuolella (A3, B2).
 - Päivitä alkuperäisen käsittelijän tilakyselyyn rajaava suunnittelupäätös sekä sitä koskevat toteutusohjeet vastaamaan kaikkien oikeutettujen käsittelijöiden näkyvyyttä. Varmista, että idempotentin lähetyksen uusi käsittelijä ei korvaa tallennettua käsittelijää ja että ensimmäinen päätöksentekijä säilyy samanaikaisissa yrityksissä (A3, B2).
-- Nimeä tukidokumentit, sidosryhmät ja riippuvuuksien päätösomistajat; varmista Rovo-URL:n ja poiminta-ajan alkuperä. Päivitä PRD:n lähtötiedot vasta näiden perusteella (B2, B3).
+- Merkitse muut tukidokumentit, sidosryhmät ja riippuvuuksien päätösomistajat Unknown-tilaan, kunnes ne voidaan yksilöidä; käyttäjän mukaan muita ei nyt ole tiedossa. Rovo-URL ja poiminta-aika ovat käyttäjän vahvistamia, mutta niitä ei ole tarkistettu ulkoisesta lähteestä. Älä esitä puuttuvia lähteitä varmennettuina PRD:ssä (B2, B3).
 - Kirjoita kolme toimintoa ja tilasiirtymät testattaviksi hyväksymiskriteereiksi: tasan 10 000 euroa, kaksi peräkkäistä palautusta, `PENDING`-tilan kysely, hyväksyntä/hylkäys, uudelleen lähetetty `refundId` ja hylätyn vaikutus myöhempään summaan (A3, C2).
+- Näytä automaattisissa testeissä myös roolirajat ja hyväksynnän esto paikallisen testin ulkopuolella. Esitä paikallisen MVP:n kolme toimintoa manuaalisessa demossa Seppo Sutiselle ja tallenna erillinen hyväksyntänäyttö ennen kuin demo merkitään hyväksytyksi; tämä ei korvaa GitHubin vaiheportin riippumatonta hyväksyntää (A1, A3, B2).
