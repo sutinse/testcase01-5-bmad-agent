@@ -1,0 +1,8 @@
+schemaVersion: 1
+feature: testcase01
+events:
+  20260928T145937697096Z-ab3319ebd05146c0bcc4157f99201e16.yaml: 81793d985e4691e5b561d8152084c0af71cb82c0f6710f35d3ca107ae0003d71
+stages:
+  prd: approved
+  architecture: pending
+  planning: pending
