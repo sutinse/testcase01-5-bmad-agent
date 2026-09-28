@@ -199,7 +199,7 @@ def approvals(feature):
     return state
 
 
-def verify_event(record, repo, active=True):
+def verify_event(record, repo, active=True, require_protection=True):
     if record["action"] == "changes_requested":
         pr = github(f"repos/{repo}/pulls/{record['pr']}")
         reviews = page(f"repos/{repo}/pulls/{record['pr']}/reviews?per_page=100")
@@ -222,7 +222,8 @@ def verify_event(record, repo, active=True):
         raise GateError("Approval PR is not merged at recorded commit")
     if pr["head"]["sha"] != record["headSha"] or pr["user"]["login"] == record["reviewer"]:
         raise GateError("PR head changed or author approved own work")
-    protection(pr, repo)
+    if require_protection:
+        protection(pr, repo)
     reviews = page(f"repos/{repo}/pulls/{record['pr']}/reviews?per_page=100")
     review = approved_review(pr, reviews) if active else next((item for item in reviews
         if item.get("state") == "APPROVED" and item.get("commit_id") == record["headSha"]
@@ -240,7 +241,7 @@ def verify_event(record, repo, active=True):
             raise GateError(f"Merge commit does not contain approved artifact: {path}")
 
 
-def check(feature, stage, repo):
+def check(feature, stage, repo, require_protection=True):
     if stage == "prd":
         source = ROOT / "bmad-output" / feature / "input" / "rovo-feature.md"
         rubric = ROOT / "docs" / "qg1" / "feature-readiness.md"
@@ -249,12 +250,21 @@ def check(feature, stage, repo):
     verify_snapshot(feature)
     current = approvals(feature)
     for record in events(feature):
-        verify_event(record, repo, active=record == current.get(record["stage"]))
+        verify_event(record, repo, active=record == current.get(record["stage"]),
+                     require_protection=require_protection)
     preceding_stages = STAGES[:STAGES.index(stage)] if stage in STAGES else STAGES
     for preceding in preceding_stages:
         record = current.get(preceding)
         if not record:
             raise GateError(f"WAITING_FOR_{preceding.upper()}_APPROVAL")
+
+
+def validate_history(feature, repo, require_protection=True):
+    verify_snapshot(feature)
+    current = approvals(feature)
+    for record in events(feature):
+        verify_event(record, repo, active=record == current.get(record["stage"]),
+                     require_protection=require_protection)
 
 
 def record_approval(feature, stage, pr_number, paths, repo):
@@ -330,7 +340,7 @@ def unchanged_event_history(base_ref):
             raise GateError(f"Existing event modified or deleted: {line}")
 
 
-def validate_code_changes(base_ref, repo):
+def validate_code_changes(base_ref, repo, require_protection=True):
     changed = [path.replace("\\", "/") for path in
                run("git", "diff", "--name-only", f"{base_ref}...HEAD", "--", "app").splitlines()]
     if not changed:
@@ -341,7 +351,7 @@ def validate_code_changes(base_ref, repo):
     scopes = set()
     for directory in features.iterdir():
         if directory.is_dir() and approvals(directory.name).get("planning"):
-            check(directory.name, "development", repo)
+            check(directory.name, "development", repo, require_protection=require_protection)
             manifest = ROOT / "bmad-output" / directory.name / "handoff-manifest.json"
             for story in json.loads(manifest.read_text(encoding="utf-8"))["stories"]:
                 scopes.update(story["ownedScope"])
@@ -381,10 +391,7 @@ def main():
                 raise GateError("--pr is required")
             print(request_changes(options.feature, options.stage, options.pr, repo))
         else:
-            verify_snapshot(options.feature)
-            current = approvals(options.feature)
-            for record in events(options.feature):
-                verify_event(record, repo, active=record == current.get(record["stage"]))
+            validate_history(options.feature, repo)
             if options.command == "status":
                 print({stage: "approved" if approvals(options.feature).get(stage) else "pending" for stage in STAGES})
         print("PASS")

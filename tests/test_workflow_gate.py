@@ -114,6 +114,22 @@ class WorkflowGateTests(unittest.TestCase):
             with patch.object(gate, "github", side_effect=self.github):
                 gate.record_approval("sample", "prd", 7, [], "org/repo")
 
+    def test_ci_verification_does_not_need_branch_protection_api(self):
+        self.record()
+
+        def ci_github(endpoint):
+            if endpoint.endswith("/protection"):
+                raise gate.GateError("Resource not accessible by integration")
+            return self.github(endpoint)
+
+        with patch.object(gate, "github", side_effect=ci_github):
+            with self.assertRaisesRegex(gate.GateError, "Resource not accessible"):
+                gate.validate_history("sample", "org/repo")
+            gate.validate_history("sample", "org/repo", require_protection=False)
+            self.reviews[0]["state"] = "DISMISSED"
+            with self.assertRaisesRegex(gate.GateError, "No human approval"):
+                gate.validate_history("sample", "org/repo", require_protection=False)
+
     def test_merged_bytes_must_match(self):
         self.record()
         original = self.github

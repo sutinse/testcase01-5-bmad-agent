@@ -33,11 +33,13 @@ Before using this in production, an administrator must configure the default
 branch to require PRs, at least one independent human review, dismissal of stale
 reviews on new pushes, and required `workflow-gate`/test checks. Restrict bypass
 and admin access, protect `.bmad/`, `scripts/`, `.github/` via CODEOWNERS, and
-disallow direct pushes. Confirm branch-protection API is readable to the CLI/CI.
-The CLI checks enabled review policy and required status checks, but cannot
-enforce administrator behavior or prove that all required checks passed at merge;
-GitHub branch protection must enforce both. This checkout has no `.git` metadata,
-so the protected-branch integration must be exercised in a real test repository.
+disallow direct pushes. Confirm the branch-protection API is readable to the
+approval-recording CLI. It checks required reviews and status checks before
+recording an approval. CI uses its default token to verify the merged PR,
+human review and artifact hashes; it relies on GitHub to enforce branch
+protection at merge rather than reading that admin-only API. GitHub branch
+protection must enforce the review and status checks, including for the evidence
+PR. Exercise the protected-branch integration in a real test repository.
 
 `workflow.yaml` is a derived local integrity check, not a trust anchor. The
 PR-CI rejects edits/deletions of events already on the base branch. A local
