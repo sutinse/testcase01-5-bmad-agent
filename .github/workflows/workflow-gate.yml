@@ -28,14 +28,14 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          from scripts.workflow_gate import unchanged_event_history, validate_code_changes
+          from scripts.workflow_gate import unchanged_event_history, validate_code_changes, validate_history
           import os
           import subprocess
 
           unchanged_event_history(os.environ['GATE_BASE_REF'])
+          repo = subprocess.check_output(['gh', 'repo', 'view', '--json', 'nameWithOwner', '--jq', '.nameWithOwner'], text=True).strip()
           for directory in Path('.bmad/features').glob('*') if Path('.bmad/features').exists() else ():
               if directory.is_dir():
-                  subprocess.run(['python', 'scripts/workflow_gate.py', 'validate-history', directory.name], check=True)
-          repo = subprocess.check_output(['gh', 'repo', 'view', '--json', 'nameWithOwner', '--jq', '.nameWithOwner'], text=True).strip()
-          validate_code_changes(os.environ['GATE_BASE_REF'], repo)
+                  validate_history(directory.name, repo, require_protection=False)
+          validate_code_changes(os.environ['GATE_BASE_REF'], repo, require_protection=False)
           PY
