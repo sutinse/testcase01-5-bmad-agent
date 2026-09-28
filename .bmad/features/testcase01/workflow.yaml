@@ -1,7 +1,7 @@
 schemaVersion: 1
 feature: testcase01
 events:
-  20260928T145937697096Z-ab3319ebd05146c0bcc4157f99201e16.yaml: d11ad03cbdcdb1506f3955213af943e90520eb3c0ba958ed1c5556217cb53812
+  20260928T145937697096Z-ab3319ebd05146c0bcc4157f99201e16.yaml: 65d96edde7ddbc36755fea076bf6cd5757d9a7a8a4aaa84be9b897afd43efb83
 stages:
   prd: approved
   architecture: pending
