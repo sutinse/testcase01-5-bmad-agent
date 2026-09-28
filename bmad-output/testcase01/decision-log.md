@@ -2,6 +2,16 @@
 
 Paikallinen suunnitteluloki. Nämä päätökset eivät ole GitHub-portin hyväksyntöjä. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-28 - Arkkitehtuurin ADR-ehdotukset (ei hyväksytty)
+- **ADR-0014 (Proposed):** Kolme erillistä REST-pyyntöä: lähetys, myöhempi päätös ja tilakysely.
+- **ADR-0015 (Proposed):** Yksi SQLite-kirjoittaja, varhainen kirjoituslukko, täsmälliset senttimäärät ja atominen 365 vuorokauden kertymä.
+- **ADR-0016 (Proposed):** Paikallisen testitokenin varmennus, framework-roolit ja vain testiprofiilissa sallittu päätösreitti.
+- **ADR-0017 (Proposed):** Palvelimen omistama palautuksen tila, identtinen uusinta ja ensimmäinen päätöksentekijä jäävät voimaan.
+- **ADR-0018 (Proposed):** 200 liiketoimintatiloille ja RFC 7807 -virherunko epäkelvoille pyynnöille.
+- **ADR-0019 (Proposed):** Yhtenäinen nimeäminen ja JSON-lokien pyyntökorrelaatio.
+- **ADR-0020 (Proposed):** Kaikki oikeutetut käsittelijät voivat kysyä tilan; vanhan, vain alkuperäiselle käsittelijälle sallitun tilakyselyn korvaaminen edellyttää erillistä hyväksyntää.
+- **Source:** [arkkitehtuuriluonnos](architecture.md). Ehdotukset eivät muuta lukittua ohjetta tai anna toteutuslupaa ennen riippumatonta GitHub-katselmointia, puuttuvien lähteiden käsittelyä ja ristiriitojen ratkaisemista.
+
 ### 2026-09-28 - PRD-luonnoksen laajuus ja priorisointi
 - **Decision:** PRD 0.1 kuvaa vain käyttäjän vahvistaman suljetun paikallisen MVP:n. Kaikki kahdeksan toiminnallista ja neljä laatua koskevaa vaatimusta ovat Must, koska kukin osallistuu välttämättömään kolmen toiminnon, kertymän eheyden tai testin eristämisen kokonaisuuteen; uusia Should/Could-toimintoja ei oleteta. Tuotantohyväksyntä, todellinen ihmisyyden todennus, Entra-tuotantointegraatio ja vanha historia pysyvät tämän toimituksen ulkopuolella.
 - **Rationale:** Prioriteetit ilmaisevat tämän toimituksen vähimmäisrajan, eivät arvioita tulevista ominaisuuksista. PRD:n avoimet tekniset ja hallinnolliset päätökset kirjataan addendumiin arkkitehtuuria varten.
