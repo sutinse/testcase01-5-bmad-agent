@@ -1,0 +1,20 @@
+bmad_version: "6.x"
+
+project:
+  name: "testcase01 - vakuutusmaksupalautusten hyvaksynta"
+  track: "bmad-method"
+  created: "2026-09-28"
+
+paths:
+  output_folder: "bmad-output/testcase01"
+  stories_folder: "bmad-output/testcase01/stories"
+  decision_log: "bmad-output/testcase01/decision-log.md"
+  project_context: "bmad-output/testcase01/project-context.md"
+
+languages:
+  communication: "Finnish"
+  document_output: "Finnish"
+
+delivery:
+  metric: "count-based"
+  story_sizing: "one agent session (~2-8h, one dev-day max); split if larger"

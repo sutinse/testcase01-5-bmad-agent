@@ -1,0 +1,6 @@
+/.bmad/ @REPLACE_WITH_HUMAN_OWNER
+/scripts/workflow_gate.py @REPLACE_WITH_HUMAN_OWNER
+/.github/agents/ @REPLACE_WITH_HUMAN_OWNER
+/.github/skills/workflow-gate/ @REPLACE_WITH_HUMAN_OWNER
+/.github/workflows/ @REPLACE_WITH_HUMAN_OWNER
+/docs/qg1/ @REPLACE_WITH_HUMAN_OWNER

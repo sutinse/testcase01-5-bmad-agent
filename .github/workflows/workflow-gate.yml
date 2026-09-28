@@ -1,0 +1,41 @@
+name: workflow-gate
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  workflow-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-gate.txt
+      - run: python -m unittest discover -s tests -p test_workflow_gate.py
+      - name: Verify each feature's event history
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GATE_BASE_REF: origin/${{ github.base_ref || 'main' }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.workflow_gate import unchanged_event_history, validate_code_changes
+          import os
+          import subprocess
+
+          unchanged_event_history(os.environ['GATE_BASE_REF'])
+          for directory in Path('.bmad/features').glob('*') if Path('.bmad/features').exists() else ():
+              if directory.is_dir():
+                  subprocess.run(['python', 'scripts/workflow_gate.py', 'validate-history', directory.name], check=True)
+          repo = subprocess.check_output(['gh', 'repo', 'view', '--json', 'nameWithOwner', '--jq', '.nameWithOwner'], text=True).strip()
+          validate_code_changes(os.environ['GATE_BASE_REF'], repo)
+          PY
