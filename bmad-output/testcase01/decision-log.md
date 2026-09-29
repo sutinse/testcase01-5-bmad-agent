@@ -2,6 +2,11 @@
 
 Paikallinen suunnitteluloki. Lokkimerkinnät eivät itsessään ole GitHub-portin hyväksyntöjä: arkkitehtuuri hyväksyttiin PR #5:ssä ja näyttö kirjattiin PR #6:ssa. Alla olevan 2026-09-28 ADR-luettelon "Proposed" kuvaa sen silloista tilaa, ei nykyistä porttitilaa. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-29 - Suunnittelupaketin JWT-tarkennuksen uudelleenkatselmointipyyntö (ehdotus)
+- **Change requested:** Tarinan 3.1 hyväksymiskriteereihin ja testeihin lisätään NFR-001:n ja ADR-0021:n mukaiset vaatimukset: kaikilla kolmella REST-toiminnolla validoidun tokenin `sub` on ei-tyhjä ja `groups` sisältää vähintään yhden ei-tyhjän jäsenen. Puuttuva, tyhjä tai pelkkää tyhjää tilaa sisältävä arvo palauttaa 401 `application/problem+json`; puuttuva vaadittu rooli palauttaa edelleen 403. Tarinan riippuvuudet, epic-kooste, sprintin järjestys ja handoff päivitetään tarvittavilta osin.
+- **Rationale:** Nykyinen hyväksytty suunnittelupaketti edeltää NFR-001:tä ja ADR-0021:tä, eikä ohjaa toteutusta testaamaan tyhjiä väitteitä.
+- **Gate:** Tämä PR pyytää riippumattomalta arvioijalta GitHubin **Request changes** -arviota nykyiselle head-commitille, ei hyväksyntää tai yhdistämistä. Vasta sen jälkeen `request-changes testcase01 planning --pr <numero>` voi kirjata mitätöinnin erillisessä suojatussa PR:ssä. Hyväksyttyjä tarinoita, epicejä, sprinttiä tai handoffia ei muuteta tässä PR:ssä. Päivitetty suunnittelupaketti tarvitsee uuden erillisen hyväksynnän ennen Java-työtä.
+
 ### 2026-09-29 - ADR-0021: ei-tyhjät paikalliset JWT-väitteet (ehdotus)
 - **Decision:** Täydennetään ADR-0016:ta: validoidun testitokenin `sub` ja `groups` tarkistetaan ennen liiketoimintakäsittelyä kaikilla kolmella reitillä; tyhjä tai puuttuva identiteetti tai ryhmäjoukko hylätään 401-virheenä. `@RolesAllowed` säilyy erillisenä roolirajana.
 - **Gate:** PRD:n tarkennus hyväksyttiin PR #13:ssa ja kirjattiin PR #14:ssa; aiempi arkkitehtuurihyväksyntä mitätöitiin PR #16:ssa. Tämä ADR sekä tarinan 3.1 ja suunnittelupaketin muutokset edellyttävät omia riippumattomia hyväksyntöjään ennen Java-toteutusta.
