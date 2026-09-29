@@ -1,0 +1,8 @@
+schemaVersion: 1
+feature: testcase01
+stage: prd
+action: changes_requested
+pr: 11
+headSha: db79e73fd48b6c3f54decca29d72e24a33e66b2d
+reviewer: sutinse1
+reviewedAt: '2026-09-29T12:55:20Z'
