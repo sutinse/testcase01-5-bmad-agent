@@ -4,7 +4,12 @@ This repository has a planning pipeline and no Java application yet. Keep each f
 planning output under `bmad-output/<feature-id>/`. The input must be a saved Rovo
 snapshot with source URL and retrieval time. QG1 requires the authentic external rubric;
 `.github/skills/qg1-feature-readiness/SKILL.md` does not provide one. Pause when either
-source is missing. Do not fabricate the refund `CONTEXT.md`, ADRs or spec.
+source is missing. Do not fabricate the refund `CONTEXT.md`, ADRs or spec. For the
+testcase01 local MVP, those legacy files are unavailable: use its approved PRD,
+`bmad-output/testcase01/project-context.md` and approved architecture as the
+reviewable planning sources. Any later change to the source hierarchy requires a
+protected PR and the affected stage approvals; this exception does not authorize
+production refund approvals.
 
 Use the BMAD skills in `.github/skills/` for planning only. Product owns QG1, PRD,
 stories, sprint and handoff; Architect owns architecture and ADR decisions. Run
@@ -27,6 +32,8 @@ dependencies. The reviewer reports findings independently and does not change
 production code. The final code PR needs a human review and required CI before merge.
 
 For refund implementation, `.github/copilot-instructions.md` remains the authoritative
-locked technical decision reference (including ADR-0013's three-request flow). Read it
-before Java work. Its referenced `CONTEXT.md`, ADRs and spec must exist and agree with
-the approved stories before implementation begins.
+locked technical decision reference. Read it before Java work. For the testcase01
+local MVP, reconcile it with the approved PRD, architecture and stories; the absent
+legacy `CONTEXT.md`, `docs/adr/` and spec are not implementation prerequisites or
+sources to reconstruct. The approved architecture contains the three-request flow
+and local-only ADR-0016/ADR-0020 exceptions; it does not approve production use.
