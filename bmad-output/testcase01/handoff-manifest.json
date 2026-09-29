@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-09-29T11:09:45.8806723Z",
+  "projectName": "Refund Approval Check",
+  "outputFolder": "bmad-output/testcase01",
+  "stories": [
+    {
+      "id": "3.1.validate-test-jwt",
+      "storyFilePath": "bmad-output/testcase01/stories/3.1.validate-test-jwt.story.md",
+      "status": "ready-for-dev",
+      "epic": "3",
+      "storyNumber": "1",
+      "title": "Paikallisen testitokenin varmennus",
+      "ownedScope": [
+        "app/pom.xml",
+        "app/src/main/resources/application.properties",
+        "app/src/test/java/**/refundapproval/security/LocalJwtValidationTest.java",
+        "app/src/test/java/**/refundapproval/security/TestTokenFactory.java"
+      ],
+      "wave": 1,
+      "parallelSet": null,
+      "dependencies": [],
+      "acceptanceCriteriaSummary": [
+        "Quarkus-runko sisältää REST/JSON-, JDBC/SQLite-, Flyway-, SmallRye JWT- ja JSON-lokitusriippuvuudet.",
+        "Testitokenin allekirjoitus, iss, aud ja voimassa oleva exp varmennetaan ennen liiketoimintavastausta.",
+        "Roolit tulevat validoidusta kartoituksesta ja sub on myöhempien tarinoiden käytettävissä."
+      ],
+      "lockedSectionsNote": "Sections Acceptance Criteria, Dev Notes, and Testing are LOCKED. External dev tools must not edit them. Populate only the Dev Agent Record section.",
+      "devAgentRecord": null
+    }
+  ]
+}
