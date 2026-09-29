@@ -2,6 +2,11 @@
 
 Paikallinen suunnitteluloki. Lokkimerkinnät eivät itsessään ole GitHub-portin hyväksyntöjä: arkkitehtuuri hyväksyttiin PR #5:ssä ja näyttö kirjattiin PR #6:ssa. Alla olevan 2026-09-28 ADR-luettelon "Proposed" kuvaa sen silloista tilaa, ei nykyistä porttitilaa. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-29 - Suunnittelupaketin ei-tyhjien JWT-väitteiden tarkennus (ehdotus)
+- **Decision:** Tarina 3.1 omistaa frameworkin validoiman tokenin yhteisen `sub`/`groups`-sisältötarkistuksen ja testifixturen; tarinat 1.3, 2.1 ja 2.3 kytkevät sen omiin reitteihinsä ja todentavat puuttuvien, tyhjien ja vain tyhjää tilaa sisältävien väitteiden 401 problem+json -vasteet sekä väärän roolin 403-vasteen. Päivitetty tiedosto-omistus näkyy sprintissä ja handoffissa; tarinoiden järjestystä ei muuteta.
+- **Source:** Hyväksytyt NFR-001 ja ADR-0021; suunnittelun vanha hyväksyntä mitätöitiin PR #19:n `CHANGES_REQUESTED`-arvion perusteella PR #20:ssä.
+- **Gate:** Tämä paketti tarvitsee oman riippumattoman hyväksynnän, yhdistämisen ja porttiin kirjatun suunnitteluhyväksynnän ennen Java-työtä. Tämä lokimerkintä ei myönnä sitä.
+
 ### 2026-09-29 - ADR-0021: ei-tyhjät paikalliset JWT-väitteet (ehdotus)
 - **Decision:** Täydennetään ADR-0016:ta: validoidun testitokenin `sub` ja `groups` tarkistetaan ennen liiketoimintakäsittelyä kaikilla kolmella reitillä; tyhjä tai puuttuva identiteetti tai ryhmäjoukko hylätään 401-virheenä. `@RolesAllowed` säilyy erillisenä roolirajana.
 - **Gate:** PRD:n tarkennus hyväksyttiin PR #13:ssa ja kirjattiin PR #14:ssa; aiempi arkkitehtuurihyväksyntä mitätöitiin PR #16:ssa. Tämä ADR sekä tarinan 3.1 ja suunnittelupaketin muutokset edellyttävät omia riippumattomia hyväksyntöjään ennen Java-toteutusta.

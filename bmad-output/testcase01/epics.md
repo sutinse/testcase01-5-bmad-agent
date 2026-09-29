@@ -84,7 +84,7 @@ testiavaimen yksityisen osan tallentaminen sovellukseen.
 
 | ID | Slug | Intent | Status |
 | --- | --- | --- | --- |
-| 3.1 | validate-test-jwt | Paikallinen allekirjoitus-, issuer-, audience-, expiry- ja roolivarmennus | ready-for-dev |
+| 3.1 | validate-test-jwt | Paikallinen allekirjoitus-, issuer-, audience-, expiry-, sub/groups-sisältö- ja roolivarmennus | ready-for-dev |
 | 3.2 | guard-decisions | Testiprofiiliin sidottu päätösreitti ja muiden profiilien estot | backlog |
 | 3.3 | problem-responses | Yhteinen problem+json-virhesovitus kaikille reiteille | backlog |
 | 3.4 | correlated-json-logs | JSON-lokien korrelaatio onnistumisissa ja virheissä | backlog |
