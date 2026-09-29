@@ -1,19 +1,19 @@
 # System Architecture: testcase01 / Refund Approval Check
 
-**Versio:** 0.1 (luonnos)  \
-**Päiväys:** 2026-09-28  \
+**Versio:** 0.2 (NFR-001-muutosehdotus)  \
+**Päiväys:** 2026-09-29  \
 **Vastuu:** Architect  \
 **Raide:** BMad Method  \
-**Tila:** Proposed; ei GitHubin arkkitehtuurivaiheen hyväksyntää  \
+**Tila:** aiempi arkkitehtuurihyväksyntä mitätöity PR #16:ssa; ADR-0021 odottaa uutta vaihehyväksyntää  \
 **Lähde:** [hyväksytty PRD](prd.md), [projektikonteksti](project-context.md), [päätösloki](decision-log.md), [PRD:n addendum](addendum.md)
 
-PRD:n otsakkeessa lukee edelleen "luonnos", mutta GitHub-portti vahvistaa PRD-vaiheen hyväksytyksi. Tätä jo hyväksyttyä tiedostoa ei muuteta arkkitehtuurin mukana. Alla olevat ADR-numerot ovat alustavia, eivät väitteitä olemassa olevien ADR-tiedostojen sisällöstä. Ne tulevat voimaan vasta arkkitehtuurin riippumattoman katselmoinnin ja yhdistämisen jälkeen.
+PRD:n uusi NFR-001 on hyväksytty PR #13:ssa ja kirjattu porttiin PR #14:ssa. Arkkitehtuurin aiempi hyväksyntä mitätöitiin PR #15:n muutospyynnön perusteella PR #16:ssa. ADR-0021 ja muutettu kattavuus tulevat voimaan vasta uuden arkkitehtuuri-PR:n riippumattoman katselmoinnin, yhdistämisen ja porttiin kirjaamisen jälkeen.
 
 ## 1. System Overview
 
 Yksi suljettu, paikallinen REST-palvelu tallentaa testipyynnöistä syntyneitä kokonaisia EUR-palautuksia, laskee asiakaskohtaisen 365 UTC-vuorokauden kertymän ja sallii kynnyksen ylittävän palautuksen ratkaisun vain erillisellä testihyväksyjällä. Käsittelijä voi erikseen lukea minkä tahansa tallennetun palautuksen nykytilan. Maksatusta, todellista henkilötodennusta, Entra-tuotantointegraatiota, historian tuontia ja muita valuuttoja ei toteuteta.
 
-**Arkkitehtuuriajurit:** NFR-001 (testitokenin allekirjoitus, issuer, audience ja voimassaolo), NFR-002 (päätösreitin ehdoton testiprofiiliraja), NFR-003 (järjestys ja yksi päätös kilpailutilanteissa) sekä NFR-004 (erotellut virheet ja jäljitettävyys). FR-002:n alarajan sisällyttäminen ja FR-004:n laajempi tilan luku ovat sopimuksen kriittiset rajatapaukset. Tiimin koko, suorituskykytavoite, tietojen säilytysaika ja tuotantovaatimukset eivät ole tiedossa; niitä ei oleteta.
+**Arkkitehtuuriajurit:** NFR-001 (testitokenin allekirjoitus, issuer, audience, voimassaolo sekä ei-tyhjät `sub` ja `groups`), NFR-002 (päätösreitin ehdoton testiprofiiliraja), NFR-003 (järjestys ja yksi päätös kilpailutilanteissa) sekä NFR-004 (erotellut virheet ja jäljitettävyys). FR-002:n alarajan sisällyttäminen ja FR-004:n laajempi tilan luku ovat sopimuksen kriittiset rajatapaukset. Tiimin koko, suorituskykytavoite, tietojen säilytysaika ja tuotantovaatimukset eivät ole tiedossa; niitä ei oleteta.
 
 ## 2. Architecture Pattern
 
@@ -21,7 +21,7 @@ Yksi suljettu, paikallinen REST-palvelu tallentaa testipyynnöistä syntyneitä 
 
 ## 3. Architecture Decision Records
 
-Kaikkien alla olevien päätösten tila on **Proposed**. Kunkin päätöksen "lukittu" tarkoittaa tavoiteltua sopimusta *vasta hyväksytyn arkkitehtuuri-PR:n jälkeen*. Vanhoja lähteitä `CONTEXT.md`, `docs/adr/` ja `.scratch/refund-approval-check/spec.md` ei ole tässä repossa; niiden sisältöä ei rekonstruoida. Ennen Java-kehitystä on toimitettava ja sovitettava ne yhteen hyväksytyn PRD:n kanssa sekä muutettava ristiriitainen `.github/copilot-instructions.md` erillisellä hyväksytyllä päätöksellä. Pelkkä tämän luonnoksen hyväksyntä ilman sitä ei tee tuotantohyväksynnästä sallittua.
+ADR-0014–0020 ovat aiemman hyväksytyn arkkitehtuurin päätöksiä; ADR-0021 on **Proposed**, kunnes uusi arkkitehtuuri-PR hyväksytään ja kirjataan porttiin. Vanhoja lähteitä `CONTEXT.md`, `docs/adr/` ja `.scratch/refund-approval-check/spec.md` ei ole tässä repossa; niiden sisältöä ei rekonstruoida. Paikallisen MVP:n lähdekorvaus ja repo-ohjeet hyväksyttiin PR #7:ssa. Tämä muutos ei tee tuotantohyväksynnästä sallittua.
 
 ### ADR-0014: Pidä rajapinta kolmessa REST-pyynnössä
 
@@ -50,6 +50,10 @@ Kaikkien alla olevien päätösten tila on **Proposed**. Kunkin päätöksen "lu
 ### ADR-0020: Salli tilan luku jokaiselle oikeutetulle käsittelijälle
 
 **Context (FR-004, FR-005):** Hyväksytty PRD sallii myös muun `refund-system`-käsittelijän kyselyn ja identtisen uusinnan, mutta vanhan ohjeen ADR-0013-yhteenveto vaatii tilakyselylle alkuperäisen käsittelijän JWT-subjektin. **Decision:** `GET` vaatii validoidun `refund-system`-roolin ja `sub`-arvon, mutta ei vertaa kysyjän `sub`:ia tallennettuun `processor_id`:hen. `POST` vaatii aina pyynnön `processorId == sub`, vaikka saman palautuksen identtisen uusinnan tekisi toinen käsittelijä; alkuperäinen käsittelijä pysyy tallessa. Ei uusia listaus- tai historianlukureittejä tähän toimitukseen. **Consequences / lukittu hyväksynnän jälkeen:** PRD:n mukainen näkyvyys toteutuu, mutta roolilla saa lukea kaikkien testipalautusten tilan. Tämä poikkeaa vanhasta lukitusta statusoikeudesta; ennen kehitystä on hyväksyttävä uusi ADR, joka nimenomaisesti syrjäyttää kyseisen kohdan ja päivittää ohjeen. **Alternative:** vain alkuperäisen käsittelijän statusoikeus hylätään, koska se rikkoo FR-004:n. **Revisit:** datan näkyvyyttä rajaava uusi vaatimus ja uusi hyväksytty PRD.
+
+### ADR-0021: Hylkää tyhjät paikalliset JWT-identiteetti- ja ryhmäväitteet (Proposed)
+
+**Context (NFR-001, FR-008; täydentää ADR-0016:ta):** Väitteen läsnäolo ei yksin takaa ei-tyhjää arvoa. **Decision:** Frameworkin varmennettua allekirjoituksen, issuerin, audiencen ja pakollisen voimassaoloajan tarkista validoidusta tokenista `sub` ja `groups` ennen liiketoimintakäsittelyä kaikilla kolmella reitillä. Hylkää pyyntö 401 `application/problem+json` -vastauksella, jos `sub` puuttuu, on tyhjä tai vain tyhjää tilaa, tai jos `groups` puuttuu, on tyhjä joukko tai sisältää vain tyhjiä / pelkkää tyhjää tilaa sisältäviä ryhmänimiä. Yksi ei-tyhjä ryhmä riittää väitteen muodon tarkistukseen, mutta käyttöoikeus vaatii edelleen reitin `@RolesAllowed`-roolin; väärä rooli on 403. Älä tarkista allekirjoitusta itse tai luota varmentamattomiin väitteisiin. **Consequences:** tarinan 3.1 hyväksymiskriteerit ja negatiiviset HTTP-testit on päivitettävä sekä suunnittelupaketti hyväksyttävä uudelleen ennen toteutusta; tuotannon identiteettitodennus ei muutu. **Alternative:** pelkät pakolliset väitteet tai rooliraja eivät takaa ei-tyhjiä `sub`- ja `groups`-arvoja. **Revisit:** tuotantotokenien väitesopimus määritetään erikseen.
 
 ## 4. Component Design
 
@@ -82,8 +86,8 @@ Kaikki reitit vaativat validoidun bearer JWT:n. `POST /api/v1/refund-approval-ch
 | FR-005 | FR | Lähetyksen uusinta | Processor, Repository | ADR-0015, ADR-0017, ADR-0020 | Addressed (proposed) |
 | FR-006 | FR | Päätöksen uusinta | Approval, Repository | ADR-0015, ADR-0017, ADR-0018 | Addressed (proposed) |
 | FR-007 | FR | Vain EUR ja jakamaton palautus | Processor, Repository | ADR-0015, ADR-0019 | Addressed (proposed) |
-| FR-008 | FR | Paikalliset roolit ja profiili | JWT, REST | ADR-0016, ADR-0020 | Partial: vanha auth-ohje vaatii supersession |
-| NFR-001 | NFR | JWT:n neljä tarkistusta | JWT | ADR-0016 | Partial: pakollisen exp:n kartoitus varmennettava |
+| FR-008 | FR | Paikalliset roolit ja profiili | JWT, REST | ADR-0016, ADR-0020, ADR-0021 | Addressed (proposed) |
+| NFR-001 | NFR | JWT:n varmennus ja ei-tyhjät sub/groups | JWT, väitteiden tarkistus | ADR-0016, ADR-0021 | Partial: pakollisen exp:n ja tyhjien väitteiden esto varmennettava |
 | NFR-002 | NFR | Testiprofiilin eristys | JWT, REST | ADR-0016 | Addressed (proposed) |
 | NFR-003 | NFR | Rinnakkaisten tapahtumien eheys | Processor, Approval, Repository | ADR-0015, ADR-0017 | Addressed (proposed) |
 | NFR-004 | NFR | Virheet ja korreloitavat JSON-lokit | REST, lokitus | ADR-0018, ADR-0019 | Addressed (proposed) |
