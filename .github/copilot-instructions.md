@@ -1,30 +1,34 @@
 # Copilot instructions — testcase01 (Refund Approval Check service)
 
-**2026-09-25 correction:** ADR-0013 supersedes the immediate approval flow below.
-Three separate requests are required: processor submission (persist `PENDING`
-above the threshold), approval by another natural person, and the original
-processor's status query. `PENDING` is a valid 200 OK business state; there is
-no approver on submission. Approval requires the `refund-approver` role;
-submission/status require `refund-system` and a matching JWT subject. See
-`docs/adr/0013-three-request-approval-workflow.md` for the full contract.
+**Local MVP (approved architecture, ADR-0014/0016/0020):** Three separate
+requests are required: processor submission (persist `PENDING` above the
+threshold), later decision by a distinct simulated test identity, and status
+query by any authorized `refund-system` processor. `PENDING` is a valid 200 OK
+business state; there is no approver on submission. Decisions require the
+`refund-approver` role; submission and status require `refund-system`.
+Submission must match `processorId` to the validated JWT `sub`; status does
+not require the original processor's subject. The decision route works only
+in the explicit `local-mvp` profile, never as a production approval.
 
 This repo implements a Quarkus REST API that enforces segregation-of-duties on
 insurance premium refund approvals (approver must differ from processor for
 the refund that pushes a customer's rolling 365-day cumulative refund total
-over €10,000). Full requirements/design live in `CONTEXT.md`, `docs/adr/`, and
-`.scratch/refund-approval-check/spec.md` — this file is the quick,
-locked-decision reference for generating code; **when in doubt, prefer these
-locked decisions over a more "idiomatic" default.**
+over €10,000). For the local MVP, the approved PRD and architecture under
+`bmad-output/testcase01/` and the project context there are the reviewable
+planning sources. The older `CONTEXT.md`, `docs/adr/` and
+`.scratch/refund-approval-check/spec.md` are unavailable; do not reconstruct
+or cite their contents. This file remains the quick locked-decision reference
+for generating code; **when in doubt, prefer these locked decisions over a
+more "idiomatic" default.**
 
 Planning sources (read for depth, don't restate them here):
-- `CONTEXT.md` — domain glossary (Refund, Processor, Approver, Cumulative
-  Refund Total, Partial Refund, Refund Currency)
-- `docs/adr/` — architectural decision records
-- `.scratch/refund-approval-check/spec.md` — problem statement, user stories,
-  implementation/testing decisions (LOCKED planning artifact — see
-  `docs/agents/issue-tracker.md`)
+- `bmad-output/testcase01/prd.md` — approved local MVP requirements
+- `bmad-output/testcase01/architecture.md` — approved architecture and
+  ADR-0014 through ADR-0020, including local-only identity and status rules
+- `bmad-output/testcase01/project-context.md` — project boundaries; reconcile
+  any later local clarification through the review and approval gates
 
-## Locked technical decisions (ADRs — do not deviate without a new ADR)
+## Locked technical decisions (do not deviate without an approved decision)
 
 - **Persistence: plain JDBC only. NO JPA, NO Hibernate ORM, NO Panache.**
   Use `quarkus-agroal` + `org.xerial:sqlite-jdbc`. Data rows are plain Java
@@ -36,16 +40,19 @@ Planning sources (read for depth, don't restate them here):
 - **Store:** SQLite file, single Quarkus instance — **SQLite only for MVP**, not
   a long-term choice. Do not scale to multiple instances without first moving
   off SQLite — it has no built-in HA.
-- **AuthN/AuthZ:** JWT bearer via `quarkus-smallrye-jwt`. **MVP does not stand up
-  real Entra ID issuer/JWKS/tenant integration** — assume a valid JWT is
-  already present on every request. Role checks via `@RolesAllowed` only.
-  Roles: `refund-system` (submits and polls), `refund-approver` (approves),
-  `compliance-auditor` (calls the history endpoint). One narrow, explicitly-justified exception to
-  "never hand-rolled claim inspection": verifying the approver is a natural
-  person (not a bot/service principal/group) requires inspecting the token's
-  claims directly, per `docs/adr/0001-explicit-human-approver-claim-check.md`
-  — processor-subject matching for submission/status is separately authorized
-  by ADR-0013; don't add other claim inspection.
+- **AuthN/AuthZ:** JWT bearer via `quarkus-smallrye-jwt`. The local MVP
+  validates the test JWT signature, configured local issuer and audience, and
+  required expiration; missing or invalid claims are rejected. No real Entra
+  issuer/JWKS/tenant integration is provided. The private test signing key
+  stays outside the application and repository. Role checks use `@RolesAllowed`:
+  `refund-system` submits and reads status, `refund-approver` decides.
+  Submission requires `processorId == sub`; the decision actor comes from the
+  validated `sub` and must differ from that refund's processor. Status requires
+  a validated `sub` but does not compare it with the original processor.
+  The decision route is disabled outside `local-mvp`, and test keys are not
+  configured there (fail closed). The test identity is not proof of a natural
+  person; no production approval or history endpoint is in this MVP. Do not
+  hand-roll JWT verification or add unsupported claim checks.
 - **API style:** REST + JSON (`quarkus-rest`, `quarkus-rest-jackson`).
   **Business outcomes are always `200 OK`** with an `allowed: boolean` field and
   an `outcome` wire enum (`"PENDING" | "ALLOWED" | "BLOCKED"`) — a segregation-of-duties
