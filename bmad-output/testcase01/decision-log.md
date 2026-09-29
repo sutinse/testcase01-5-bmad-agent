@@ -2,6 +2,11 @@
 
 Paikallinen suunnitteluloki. Lokkimerkinnät eivät itsessään ole GitHub-portin hyväksyntöjä: arkkitehtuuri hyväksyttiin PR #5:ssä ja näyttö kirjattiin PR #6:ssa. Alla olevan 2026-09-28 ADR-luettelon "Proposed" kuvaa sen silloista tilaa, ei nykyistä porttitilaa. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-29 - PRD:n JWT-vaatimuksen uudelleenkatselmointipyyntö (ehdotus)
+- **Change requested:** Paikallisen MVP:n NFR-001:een ehdotetaan vaatimusta, jonka mukaan validoidun testitokenin `sub` ei saa olla tyhjä tai pelkkää tyhjää tilaa ja `groups`-joukossa on oltava vähintään yksi ei-tyhjä, ei pelkkää tyhjää tilaa sisältävä ryhmä kaikilla kolmella toiminnolla. Puuttuvat ja tyhjät väitteet on katettava negatiivisilla HTTP-testeillä; roolivaatimus säilyy erillisenä.
+- **Rationale:** Pakollisen väitteen läsnäolo ei takaa ei-tyhjää arvoa; tyhjä `sub` läpäisi paikallisen HTTP-varmennuksen. Nykyinen hyväksytty PRD ei kata näitä arvoja.
+- **Gate:** Tämä PR pyytää riippumattomalta arvioijalta GitHubin **Request changes** -arviota nykyiselle head-commitille, ei hyväksyntää tai yhdistämistä. Vasta tämän jälkeen `request-changes testcase01 prd --pr <numero>` voi kirjata mitätöinnin. Hyväksyttyä PRD:tä ja muita hyväksyttyjä artefakteja ei muuteta tässä PR:ssä. Korjattu PRD, arkkitehtuuri ja suunnittelupaketti tarvitsevat omat uudet suojatut hyväksymiskierroksensa.
+
 ### 2026-09-29 - Suunnittelupaketin sarjallinen jonotus
 - **Decision:** Suunnittelu-PR:n luonnoksessa 12 tarinaa järjestetään aaltoihin 3.1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2.1 -> 2.3 -> 1.5 -> 2.2 -> 3.2 -> 3.3 -> 3.4. Kukin aalto sisältää yhden tarinan, koska jaettuja tiedostoja ja yleismerkkipolkuja ei ole sertifioitu rinnakkaiseen ajoon. Vain 3.1 merkitään `ready-for-dev`-jonoon ja handoff-manifestiin.
 - **Gate:** Jonotus ja manifesti ovat katselmoitavia luonnoksia, eivät valtuutus Java-työhön. Toteutus vaatii erikseen hyväksytyn ja yhdistetyn suunnittelu-PR:n sekä kirjatun suunnitteluportin hyväksynnän.
