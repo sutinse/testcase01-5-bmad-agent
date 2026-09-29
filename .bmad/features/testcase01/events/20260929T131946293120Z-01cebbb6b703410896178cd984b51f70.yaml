@@ -1,0 +1,13 @@
+schemaVersion: 1
+feature: testcase01
+stage: prd
+action: approved
+pr: 13
+headSha: bcef617fbfcf92dce30585894385eeb3a43fd40a
+mergeSha: 189f4522be18b0de76ea72fd6fdb8b0e1fb9b35e
+reviewer: sutinse1
+approvedAt: '2026-09-29T13:17:25Z'
+artifacts:
+  bmad-output/testcase01/input/rovo-feature.md: 9f41b8d384d591e8b90db1a6cfd12f21538b63d4617668067060810be569392b
+  bmad-output/testcase01/prd.md: 6c09d86015af7e39a47e62a4c39fb0978e8d74e15b884033b9d2248c05e6d339
+rubricHash: 1fee0ca666f2083840e1b163847764da001c28ae4de83cb2932030013d176bc9
