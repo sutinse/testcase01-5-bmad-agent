@@ -59,7 +59,7 @@ Päätökset ja ristiriidat ovat [päätöslokissa](decision-log.md). Vahvistett
 ## Planning Status
 
 - **Track:** bmad-method
-- **Stories defined:** 0
-- **Stories remaining:** Unknown, kunnes tarinat on laadittu.
+- **Stories defined:** 12 luonnosta; 3.1 on `ready-for-dev` suunnittelupaketin jonotusnäkymässä, 11 on `backlog`. Kehitys odottaa suunnitteluportin hyväksyntää.
+- **Stories remaining:** 12.
 - **Paikallisen MVP:n hyväksyntänäyttö:** sääntöjen ja paikallisen käyttörajauksen automaattiset testit kattavat kolme toimintoa, kumuloinnin, roolit ja hyväksynnän eston muissa profiileissa; lisäksi Seppo Sutiselle esitetään kolmen toiminnon manuaalinen demo. Demon hyväksyntä kirjataan erikseen eikä korvaa GitHub-vaiheportteja. Muita lähdedokumentteja tai päätösomistajia ei tunneta.
-- **Next:** täsmennä paikallisen testiavaimen hallinta ja roolikartoitus sekä rinnakkaisten tapahtumien suojaus PRD:ssä ja arkkitehtuurissa; pidä tuotannon IAM- ja Entra-varmennuksen avoimet kysymykset erillisen myöhemmän toimituksen lähtötietoina. Ratkaise aiemmista käyttöoikeus- ja MVP-päätöksistä poikkeavat muutokset hyväksytyllä suunnittelulla ennen toteutusta. GitHub-pohjainen PRD-aloitusportti läpäisee tarkistuksen, mutta QG1:n avoimet kysymykset eivät sillä ratkea eikä PRD-vaihetta ole vielä hyväksytty.
+- **Next:** PRD ja arkkitehtuuri on hyväksytty; PR #7 sovitti puuttuvien lähteiden paikallisen korvauksen ja repo-ohjeet hyväksyttyyn arkkitehtuuriin. Ehdota sarjallista suunnittelupakettia omassa suojatussa PR:ssä ja hanki riippumaton hyväksyntä ennen kehitykseen luovutusta. Tuotannon IAM- ja Entra-varmennuksen avoimet kysymykset kuuluvat erilliseen myöhempään toimitukseen.

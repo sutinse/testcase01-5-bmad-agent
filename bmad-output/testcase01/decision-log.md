@@ -1,6 +1,33 @@
 # Decision Log - testcase01
 
-Paikallinen suunnitteluloki. Nämä päätökset eivät ole GitHub-portin hyväksyntöjä. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
+Paikallinen suunnitteluloki. Lokkimerkinnät eivät itsessään ole GitHub-portin hyväksyntöjä: arkkitehtuuri hyväksyttiin PR #5:ssä ja näyttö kirjattiin PR #6:ssa. Alla olevan 2026-09-28 ADR-luettelon "Proposed" kuvaa sen silloista tilaa, ei nykyistä porttitilaa. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
+
+### 2026-09-29 - Suunnittelupaketin sarjallinen jonotus
+- **Decision:** Suunnittelu-PR:n luonnoksessa 12 tarinaa järjestetään aaltoihin 3.1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2.1 -> 2.3 -> 1.5 -> 2.2 -> 3.2 -> 3.3 -> 3.4. Kukin aalto sisältää yhden tarinan, koska jaettuja tiedostoja ja yleismerkkipolkuja ei ole sertifioitu rinnakkaiseen ajoon. Vain 3.1 merkitään `ready-for-dev`-jonoon ja handoff-manifestiin.
+- **Gate:** Jonotus ja manifesti ovat katselmoitavia luonnoksia, eivät valtuutus Java-työhön. Toteutus vaatii erikseen hyväksytyn ja yhdistetyn suunnittelu-PR:n sekä kirjatun suunnitteluportin hyväksynnän.
+- **Source:** [sprint-status](sprint-status.yaml), [handoff](handoff-manifest.json), [valmiusarvio](readiness-report-testcase01-2026-09-28.md).
+
+### 2026-09-29 - Paikallisen MVP:n lähdekorvaus hyväksytty PR #7:ssä
+- **Decision:** PR #7 hyväksyttiin riippumattomasti (`sutinse1`), sen `workflow-gate` onnistui ja PR yhdistettiin suojattuun `main`-haaraan. Paikallisen MVP:n katselmoitavat lähteet ovat hyväksytty PRD, projektikonteksti, hyväksytty arkkitehtuuri ja päivitetyt repo-ohjeet. Puuttuvia `CONTEXT.md`-, `docs/adr/`- ja refund-spec-tiedostoja ei rekonstruoida tai vaadita paikallisen MVP:n kehityksen lähtötiedoiksi.
+- **Scope:** Repo-ohjeet noudattavat ADR-0016/0020:n paikallista testitokenin varmennusta, simuloitua päätöstä ja kaikkien oikeutettujen käsittelijöiden tilakyselyä. Tämä ei muuta hyväksytyn arkkitehtuuritiedoston sisältöä eikä oikeuta tuotantohyväksyntää.
+- **Gate:** PRD ja arkkitehtuuri ovat hyväksyttyjä, mutta suunnittelupaketti on vielä `pending`; tarinoita ei ole hyväksytty kehitykseen.
+- **Source:** [PR #7](https://github.com/sutinse/testcase01-5-bmad-agent/pull/7), [arkkitehtuuri](architecture.md).
+
+### 2026-09-29 - Ehdotus lukittujen lähteiden korvaamiseksi ja repo-ohjeiden sovittamiseksi
+- **Status:** Myöhempi lähdekorvaus ja ohjemuutokset ovat ehdotuksia; PR #5:ssä hyväksyttyä arkkitehtuuria tai repo-ohjeita ei ole muutettu.
+- **Source hierarchy proposal:** Käyttäjän mukaan vain `.github/copilot-instructions.md` on saatavilla; sen viittaamia `CONTEXT.md`-, `docs/adr/`- ja refund-spec-lähteitä ei ole. Ehdotetaan, että suojattu PR nimeää tämän puutteen nimenomaisesti ja hyväksyy PRD:n, projektikontekstin, uuden arkkitehtuuripäätöksen ja repo-ohjeiden päivitetyt kohdat paikallisen MVP:n lähteiksi. Puuttuvien asiakirjojen sisältöä ei rekonstruoida.
+- **ADR-0016 alignment:** PR #5:ssä hyväksytty paikallisen `local-mvp`-profiilin päätös varmentaa testitokenin, sallii simuloidun eri identiteetin ja estää päätösreitin muissa profiileissa. Tuotantohyväksyntä ei sisälly toimitukseen. Vanha valmiiksi validoidun JWT:n ja luonnollisen henkilön oletus on vielä päivitettävä repo-ohjeessa.
+- **ADR-0020 alignment:** PR #5:ssä hyväksytyssä paikallisessa MVP:ssä jokainen validoitu `refund-system`-käsittelijä voi lukea testipalautuksen tilan; lähetys vaatii edelleen `processorId == sub`. Repo-ohjeen vanha ADR-0013-yhteenveto on vielä päivitettävä.
+- **Approval path:** Hyväksyttyä `architecture.md`-tiedostoa ei saa muuttaa paikallisesti tämän ehdotuksen perusteella. `AGENTS.md`:n lähdevaatimus, `.github/copilot-instructions.md`:n ristiriidat ja myöhempi lähdekorvaus on ratkaistava suojatussa, riippumattomasti katselmoidussa PR:ssä. Jos hyväksytty arkkitehtuurisisältö tai sen hyväksytyt riippuvuudet muuttuvat, tarvitaan uusi vaiheen PR ja hyväksyntä portin ohjeen mukaan. Chat-vastaus ei ole hyväksyntä.
+- **Made by:** käyttäjän 2026-09-29 vahvistamat ehdotusvalinnat
+- **Source:** [arkkitehtuuri](architecture.md), [addendum](addendum.md)
+
+### 2026-09-28 - Puuttuvat lähteet ja paikallisen testidatan elinkaari
+- **Decision:** Käyttäjä vahvisti, että `.github/copilot-instructions.md` on ainoa saatavilla oleva lukittuja ratkaisuja kuvaava tiedosto; sen viittaamia `CONTEXT.md`-, ADR- ja refund-spec-lähteitä ei ole saatavilla. Muita liiketoiminta- tai tietoomistajia tai tukidokumentteja ei käyttäjän mukaan ole. Kehittäjä poistaa paikallisen SQLite-tietokannan demon jälkeen; PostgreSQL:n käyttö määritellään erillisessä myöhemmässä toimituksessa.
+- **Rationale:** Puuttuvaa alkuperäistä lähdeaineistoa ei voi rekonstruoida ohjeen perusteella. Testidatan poisto rajaa paikallisen demon elinkaarta muuttamatta MVP:n tallennusteknologiaa.
+- **Impact:** Addendumin Q4 ja testidatan elinkaari tarkentuvat. Poiston toteutus ja todennus sekä lukitut päätökset korvaava hyväksytty lähde- ja ADR-paketti ovat vielä avoinna. Tämä ei ole GitHub-vaihehyväksyntä eikä poista valmiusarvion FAIL-tilaa.
+- **Made by:** käyttäjä, paikallinen tarkennus
+- **Source:** [addendum](addendum.md)
 
 ### 2026-09-28 - Arkkitehtuurin ADR-ehdotukset (ei hyväksytty)
 - **ADR-0014 (Proposed):** Kolme erillistä REST-pyyntöä: lähetys, myöhempi päätös ja tilakysely.

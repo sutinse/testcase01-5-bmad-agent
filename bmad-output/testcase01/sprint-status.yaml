@@ -1,0 +1,166 @@
+project_name: Refund Approval Check
+track: BMad Method
+generated_at: '2026-09-29'
+last_updated: '2026-09-29'
+epics:
+  - id: epic-1
+    title: Lahetys ja kertymä
+    description: Kokonainen EUR-palautus ja jarjestetty 365 vuorokauden kertymä.
+    status: backlog
+    story_ids: ['1.1', '1.2', '1.3', '1.4', '1.5']
+  - id: epic-2
+    title: Erillinen paatos ja tilan nakyvyys
+    description: Odottavan palautuksen paatos ja nykytilan luku.
+    status: backlog
+    story_ids: ['2.1', '2.2', '2.3']
+  - id: epic-3
+    title: Paikallisen simulaation turvaraja
+    description: Varmennettu paikallinen testi-identiteetti ja rajatut reitit.
+    status: in-progress
+    story_ids: ['3.1', '3.2', '3.3', '3.4']
+stories:
+  - id: 3.1.validate-test-jwt
+    title: Paikallisen testitokenin varmennus
+    epic_id: epic-3
+    status: ready-for-dev
+    file: bmad-output/testcase01/stories/3.1.validate-test-jwt.story.md
+    parallel_set: 1
+    dependencies: []
+    owned_scope:
+      - app/pom.xml
+      - app/src/main/resources/application.properties
+      - app/src/test/java/**/refundapproval/security/LocalJwtValidationTest.java
+      - app/src/test/java/**/refundapproval/security/TestTokenFactory.java
+  - id: 1.1.sqlite-schema
+    title: SQLite-skeema
+    epic_id: epic-1
+    status: backlog
+    file: bmad-output/testcase01/stories/1.1.sqlite-schema.story.md
+    parallel_set: 2
+    dependencies: ['3.1']
+    owned_scope:
+      - app/src/main/resources/db/migration/V1__create_refund_approval_check.sql
+      - app/src/test/java/**/refundapproval/persistence/RefundSchemaTest.java
+  - id: 1.2.jdbc-write-boundary
+    title: JDBC-kirjoitusraja
+    epic_id: epic-1
+    status: backlog
+    file: bmad-output/testcase01/stories/1.2.jdbc-write-boundary.story.md
+    parallel_set: 3
+    dependencies: ['1.1']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/persistence/RefundApprovalCheckRepository.java
+      - app/src/main/java/**/refundapproval/persistence/RefundApprovalCheckRow.java
+      - app/src/test/java/**/refundapproval/persistence/RefundApprovalCheckRepositoryTest.java
+  - id: 1.3.submit-and-total
+    title: Lahetys ja 365 vuorokauden kertymä
+    epic_id: epic-1
+    status: backlog
+    file: bmad-output/testcase01/stories/1.3.submit-and-total.story.md
+    parallel_set: 4
+    dependencies: ['1.1', '1.2', '3.1']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/service/RefundProcessorService.java
+      - app/src/main/java/**/refundapproval/resource/RefundApprovalCheckResource.java
+      - app/src/main/java/**/refundapproval/resource/SubmitRefundRequest.java
+      - app/src/main/java/**/refundapproval/resource/RefundStatusResponse.java
+      - app/src/test/java/**/refundapproval/service/RefundProcessorServiceTest.java
+  - id: 1.4.submission-retry
+    title: Lahetyksen uusinta
+    epic_id: epic-1
+    status: backlog
+    file: bmad-output/testcase01/stories/1.4.submission-retry.story.md
+    parallel_set: 5
+    dependencies: ['1.2', '1.3']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/service/RefundProcessorService.java
+      - app/src/test/java/**/refundapproval/service/RefundSubmissionRetryTest.java
+  - id: 2.1.decide-pending
+    title: Odottavan palautuksen paatos
+    epic_id: epic-2
+    status: backlog
+    file: bmad-output/testcase01/stories/2.1.decide-pending.story.md
+    parallel_set: 6
+    dependencies: ['1.2', '1.3', '3.1']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/service/RefundApprovalService.java
+      - app/src/main/java/**/refundapproval/resource/RefundDecisionResource.java
+      - app/src/main/java/**/refundapproval/resource/DecideRefundRequest.java
+      - app/src/main/java/**/refundapproval/persistence/RefundApprovalCheckRepository.java
+      - app/src/test/java/**/refundapproval/service/RefundApprovalServiceTest.java
+  - id: 2.3.read-status
+    title: Nykytilan luku
+    epic_id: epic-2
+    status: backlog
+    file: bmad-output/testcase01/stories/2.3.read-status.story.md
+    parallel_set: 7
+    dependencies: ['1.3', '3.1']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/resource/RefundStatusResource.java
+      - app/src/test/java/**/refundapproval/resource/RefundStatusResourceTest.java
+  - id: 1.5.eur-input
+    title: EUR-syoterajat
+    epic_id: epic-1
+    status: backlog
+    file: bmad-output/testcase01/stories/1.5.eur-input.story.md
+    parallel_set: 8
+    dependencies: ['1.3', '1.4']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/service/RefundInputValidator.java
+      - app/src/main/java/**/refundapproval/service/RefundProcessorService.java
+      - app/src/main/java/**/refundapproval/resource/RefundApprovalCheckResource.java
+      - app/src/main/java/**/refundapproval/resource/SubmitRefundRequest.java
+      - app/src/test/java/**/refundapproval/service/RefundInputValidatorTest.java
+  - id: 2.2.decision-retry
+    title: Paatoksen uusinta
+    epic_id: epic-2
+    status: backlog
+    file: bmad-output/testcase01/stories/2.2.decision-retry.story.md
+    parallel_set: 9
+    dependencies: ['2.1']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/service/RefundApprovalService.java
+      - app/src/test/java/**/refundapproval/service/RefundDecisionRetryTest.java
+  - id: 3.2.guard-decisions
+    title: Paatosreitin profiiliraja
+    epic_id: epic-3
+    status: backlog
+    file: bmad-output/testcase01/stories/3.2.guard-decisions.story.md
+    parallel_set: 10
+    dependencies: ['2.1', '3.1']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/resource/RefundDecisionResource.java
+      - app/src/main/java/**/refundapproval/resource/LocalDecisionGuard.java
+      - app/src/main/resources/application.properties
+      - app/src/test/java/**/refundapproval/resource/RefundDecisionProfileTest.java
+  - id: 3.3.problem-responses
+    title: Problem JSON -virhevastaus
+    epic_id: epic-3
+    status: backlog
+    file: bmad-output/testcase01/stories/3.3.problem-responses.story.md
+    parallel_set: 11
+    dependencies: ['1.4', '1.5', '2.1', '2.2', '2.3', '3.2']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/exception/RefundProblemMapper.java
+      - app/src/main/java/**/refundapproval/exception/RefundProblem.java
+      - app/src/test/java/**/refundapproval/exception/RefundProblemContractTest.java
+  - id: 3.4.correlated-json-logs
+    title: Korreloitavat JSON-lokit
+    epic_id: epic-3
+    status: backlog
+    file: bmad-output/testcase01/stories/3.4.correlated-json-logs.story.md
+    parallel_set: 12
+    dependencies: ['2.3', '3.2', '3.3']
+    owned_scope:
+      - app/src/main/java/**/refundapproval/resource/RefundCorrelationFilter.java
+      - app/src/main/java/**/refundapproval/resource/RefundEventLogger.java
+      - app/src/test/java/**/refundapproval/resource/RefundCorrelationLogTest.java
+sequencing_summary:
+  total_epics: 3
+  total_stories: 12
+  total_waves: 12
+  wave_widths: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ready_for_dev:
+    count: 1
+    story_ids: ['3.1']
+  handoff_notes: 'Serial draft for planning PR. Do not dispatch before independently approved and merged planning PR and recorded planning gate; each later wave waits for the previous wave to finish.'
