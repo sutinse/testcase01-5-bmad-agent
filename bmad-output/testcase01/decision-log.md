@@ -2,6 +2,10 @@
 
 Paikallinen suunnitteluloki. Lokkimerkinnät eivät itsessään ole GitHub-portin hyväksyntöjä: arkkitehtuuri hyväksyttiin PR #5:ssä ja näyttö kirjattiin PR #6:ssa. Alla olevan 2026-09-28 ADR-luettelon "Proposed" kuvaa sen silloista tilaa, ei nykyistä porttitilaa. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-29 - Arkkitehtuurin muutospyyntö NFR-001:n jälkeen (ehdotus)
+- **Change requested:** PR #13:ssa hyväksytty PRD vaatii ei-tyhjän `sub`-arvon ja vähintään yhden ei-tyhjän `groups`-ryhmän kaikilla kolmella toiminnolla. Arkkitehtuurin JWT-päätökseen ehdotetaan tätä täydentävää ADR-0021:tä sekä NFR-001:n kattavuuskartan päivitystä.
+- **Gate:** Nykyinen arkkitehtuuri on edelleen hyväksytty. Tämä PR pyytää riippumatonta GitHubin **Request changes** -arviota nykyiselle head-commitille; sitä ei hyväksytä eikä yhdistetä. Vasta arvioinnin jälkeen `request-changes testcase01 architecture --pr <numero>` voi kirjata mitätöinnin erillisessä suojatussa PR:ssä. Hyväksyttyä arkkitehtuuria ei muuteta tässä PR:ssä.
+
 ### 2026-09-29 - PRD:n JWT-vaatimuksen uudelleenkatselmointipyyntö (ehdotus)
 - **Change requested:** Paikallisen MVP:n NFR-001:een ehdotetaan vaatimusta, jonka mukaan validoidun testitokenin `sub` ei saa olla tyhjä tai pelkkää tyhjää tilaa ja `groups`-joukossa on oltava vähintään yksi ei-tyhjä, ei pelkkää tyhjää tilaa sisältävä ryhmä kaikilla kolmella toiminnolla. Puuttuvat ja tyhjät väitteet on katettava negatiivisilla HTTP-testeillä; roolivaatimus säilyy erillisenä.
 - **Rationale:** Pakollisen väitteen läsnäolo ei takaa ei-tyhjää arvoa; tyhjä `sub` läpäisi paikallisen HTTP-varmennuksen. Nykyinen hyväksytty PRD ei kata näitä arvoja.
