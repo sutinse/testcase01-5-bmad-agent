@@ -1,0 +1,25 @@
+schemaVersion: 1
+feature: testcase01
+stage: planning
+action: approved
+pr: 8
+headSha: 16ebf396d2e5b599c5bf052b71b72297dacf7257
+mergeSha: f0ab81ea036f221924211cf3b2518b444af288eb
+reviewer: sutinse1
+approvedAt: '2026-09-29T11:35:53Z'
+artifacts:
+  bmad-output/testcase01/epics.md: 7ca81d3e76e063e6f84d7065b95498cfa548516272a89bf36ecc636fbed05762
+  bmad-output/testcase01/handoff-manifest.json: 818ec170aabb871e9d22b83690f9698aa83db8914d6b672fbed17603da24b277
+  bmad-output/testcase01/sprint-status.yaml: 0139f1c8a8020637ab2c32439c391d271fb5bc8e7490ea713416efa2cff11388
+  bmad-output/testcase01/stories/1.1.sqlite-schema.story.md: 760aac7978ad570b9139895a08fb1c4b1387a10c7b60d7762e526e08ab42a8bf
+  bmad-output/testcase01/stories/1.2.jdbc-write-boundary.story.md: 9e882664cd8c6d724f4f03635688124f7141aefc4a0cc3f763215d4286747e22
+  bmad-output/testcase01/stories/1.3.submit-and-total.story.md: 25be9a4457cdca609a6ce6a0a04bc09afb4d645a00d54ca9df60a2c80e4a612d
+  bmad-output/testcase01/stories/1.4.submission-retry.story.md: 63911e428ea37ac5808192ca67e485b295bdf4e9e5679c474c86bbafa684bafa
+  bmad-output/testcase01/stories/1.5.eur-input.story.md: 408a6419faae5c6709cdc3d96eccd5bba8a7769ad89f412249697578d1d2cf6a
+  bmad-output/testcase01/stories/2.1.decide-pending.story.md: 94548745f994a24b174208f1784c29421b9bc303b9b1722a56d6660c123fe855
+  bmad-output/testcase01/stories/2.2.decision-retry.story.md: f875f8727edb0fc9f76b8eba6012422829bd3e620a0a6bf5c633ea540481fcbc
+  bmad-output/testcase01/stories/2.3.read-status.story.md: 619a02a1395a933c57c9d0134ec56f380e20ff8dddc8603fb369d96dba9e10d7
+  bmad-output/testcase01/stories/3.1.validate-test-jwt.story.md: 3d47ea6992a06c897fe45d00b2580115bd1c7535b13978f68d416430cb1400e3
+  bmad-output/testcase01/stories/3.2.guard-decisions.story.md: c9c0dedba3ac54ebf8d9399f4d787c554c7ab742964d46cf88386cce691bb9c6
+  bmad-output/testcase01/stories/3.3.problem-responses.story.md: e89ac94f97152b09385340ca76f96240f170a904b742b92c50fe1ea381bfad1b
+  bmad-output/testcase01/stories/3.4.correlated-json-logs.story.md: f61bb6d6b97328403c34ce97f98280e66f97bf7cd1f41028b810779cdd257ed3
