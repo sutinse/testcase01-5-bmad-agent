@@ -2,6 +2,10 @@
 
 Paikallinen suunnitteluloki. Lokkimerkinnät eivät itsessään ole GitHub-portin hyväksyntöjä: arkkitehtuuri hyväksyttiin PR #5:ssä ja näyttö kirjattiin PR #6:ssa. Alla olevan 2026-09-28 ADR-luettelon "Proposed" kuvaa sen silloista tilaa, ei nykyistä porttitilaa. Uusi päätös lisätään ylimmäksi; aiempia ei poisteta.
 
+### 2026-09-29 - ADR-0021: ei-tyhjät paikalliset JWT-väitteet (ehdotus)
+- **Decision:** Täydennetään ADR-0016:ta: validoidun testitokenin `sub` ja `groups` tarkistetaan ennen liiketoimintakäsittelyä kaikilla kolmella reitillä; tyhjä tai puuttuva identiteetti tai ryhmäjoukko hylätään 401-virheenä. `@RolesAllowed` säilyy erillisenä roolirajana.
+- **Gate:** PRD:n tarkennus hyväksyttiin PR #13:ssa ja kirjattiin PR #14:ssa; aiempi arkkitehtuurihyväksyntä mitätöitiin PR #16:ssa. Tämä ADR sekä tarinan 3.1 ja suunnittelupaketin muutokset edellyttävät omia riippumattomia hyväksyntöjään ennen Java-toteutusta.
+
 ### 2026-09-29 - PRD:n JWT-vaatimuksen uudelleenkatselmointipyyntö (ehdotus)
 - **Change requested:** Paikallisen MVP:n NFR-001:een ehdotetaan vaatimusta, jonka mukaan validoidun testitokenin `sub` ei saa olla tyhjä tai pelkkää tyhjää tilaa ja `groups`-joukossa on oltava vähintään yksi ei-tyhjä, ei pelkkää tyhjää tilaa sisältävä ryhmä kaikilla kolmella toiminnolla. Puuttuvat ja tyhjät väitteet on katettava negatiivisilla HTTP-testeillä; roolivaatimus säilyy erillisenä.
 - **Rationale:** Pakollisen väitteen läsnäolo ei takaa ei-tyhjää arvoa; tyhjä `sub` läpäisi paikallisen HTTP-varmennuksen. Nykyinen hyväksytty PRD ei kata näitä arvoja.
