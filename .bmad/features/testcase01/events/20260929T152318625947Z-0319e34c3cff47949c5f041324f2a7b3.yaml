@@ -1,0 +1,8 @@
+schemaVersion: 1
+feature: testcase01
+stage: architecture
+action: changes_requested
+pr: 15
+headSha: 82c7bfd461d086a7cc04040e07e0ba8400b5e9f5
+reviewer: sutinse1
+reviewedAt: '2026-09-29T15:22:10Z'
