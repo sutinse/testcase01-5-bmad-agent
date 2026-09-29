@@ -1,15 +1,15 @@
 # Product Requirements Document (PRD) - testcase01
 
 **Project Name:** Refund Approval Check, paikallinen MVP
-**Version:** 0.1
-**Date:** 2026-09-28
-**Author:** Product, luonnos
-**Status:** Luonnos; ei GitHubin PRD-vaiheen hyväksyntää
+**Version:** 0.2 (NFR-001-muutosehdotus hyväksyttyyn perustasoon)
+**Date:** 2026-09-29
+**Author:** Product
+**Status:** aiempi PRD-hyväksyntä mitätöity; NFR-001:n muutos odottaa uutta GitHubin PRD-vaiheen hyväksyntää
 **Track:** BMad Method
 
 Lähteet: [Rovo-snapshot](input/rovo-feature.md), [QG1-uudelleenarviointi](qg1-feature-readiness.md), [projektikonteksti](project-context.md) ja [päätösloki](decision-log.md). Rovo-lähteen URL ja poiminta-aika ovat käyttäjän vahvistamia, eivät ulkoisesti todennettuja. Tässä PRD:ssä kuvataan vain suljettu paikallinen MVP; tuotantokelpoisuutta ei väitetä.
 
-PRD-vaiheen GitHub-portti edellyttää sekä tämän PRD:n että lähdesnapshotin katselmointia samassa PR:ssä; lähdesnapshotin alkuperäinen kuvausteksti säilyy muuttumattomana.
+PRD-vaiheen uusi GitHub-hyväksyntä edellyttää sekä tämän PRD:n että lähdesnapshotin katselmointia samassa PR:ssä; lähdesnapshotin alkuperäinen kuvausteksti säilyy muuttumattomana.
 
 ## Executive Summary
 
@@ -120,9 +120,9 @@ Lähtökuvaus nostaa esiin kumuloinnin, valuutan, asiakasryhmät, osapalautukset
 ## Non-Functional Requirements
 
 ### NFR-001: Testitokenin varmennus — MUST (Security)
-**Description:** Paikallinen palvelu hyväksyy testipyynnön vasta allekirjoituksen, sallitun myöntäjän ja yleisön sekä voimassaolon tarkistuksen jälkeen.
-**Acceptance / Threshold:** Kaikki neljä ehtoa täyttyvät; yhdenkin ehdon puuttuessa tai epäonnistuessa yksikään pyyntö ei saa onnistunutta liiketoimintavastausta.
-**Measurement Method:** Automaattiset positiiviset ja kunkin ehdon rikkomista osoittavat negatiiviset testit.
+**Description:** Paikallinen palvelu hyväksyy testipyynnön vasta allekirjoituksen, sallitun myöntäjän ja yleisön, voimassaolon sekä validoidun tokenin ei-tyhjän `sub`- ja `groups`-väitteen tarkistuksen jälkeen.
+**Acceptance / Threshold:** Kaikki neljä aiempaa varmennusehtoa täyttyvät ja `sub` on ei-tyhjä, ei pelkkää tyhjää tilaa sisältävä tunniste; `groups` on ei-tyhjä joukko, jossa on vähintään yksi ei-tyhjä, ei pelkkää tyhjää tilaa sisältävä ryhmä. Puuttuva tai näitä ehtoja rikkova väite estää kaikkien kolmen toiminnon onnistuneen liiketoimintavastauksen. Ryhmän jäsenyys ei yksin anna oikeutta toimintoon: roolivaatimus säilyy FR-008:ssa.
+**Measurement Method:** Automaattiset positiiviset ja kunkin aiemman ehdon rikkomista osoittavat negatiiviset testit sekä puuttuvan, tyhjän ja vain tyhjää tilaa sisältävän `sub`-arvon ja puuttuvan, tyhjän tai vain tyhjiä arvoja sisältävän `groups`-joukon negatiiviset HTTP-testit.
 
 ### NFR-002: Simulaation eristäminen — MUST (Security)
 **Description:** Testitokenilla tehtävä hyväksyntä toimii vain eksplisiittisesti valitussa paikallisessa testiprofiilissa.

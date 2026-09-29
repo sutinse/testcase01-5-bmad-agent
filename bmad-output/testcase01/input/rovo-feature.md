@@ -9,4 +9,8 @@ Lisäksi se onko tässä asiakaskohtaisia rajoja eli sovelletaanko tätä sekä 
 
 se vielä mikä tuli mieleen että hyväksyjän on oltava luonnollinen henkilö, sitä ei voi siirtää AI:llet ai botille tai ryhmälle jos heillä on käyttöoikeuksia
 
-tuli vielä mieleen osapalautusten käsittely, jos käsittelijä haluaa palauttaa vain osan ja osan allokoida vaikka regresseihin niin sallitaanko tämä. Voidaan vaikka keksiä että ei sallita. 
+tuli vielä mieleen osapalautusten käsittely, jos käsittelijä haluaa palauttaa vain osan ja osan allokoida vaikka regresseihin niin sallitaanko tämä. Voidaan vaikka keksiä että ei sallita.
+
+---
+
+**Katselmointihuomautus (2026-09-29):** Yllä oleva alkuperäinen Rovo-kuvaus on ennallaan. Tämä lähdesnapshot on mukana uudessa PRD-vaiheen katselmoinnissa; validoidun testitokenin ei-tyhjiä `sub`- ja `groups`-väitteitä koskeva NFR-001-tarkennus on myöhempi PRD-vaatimus, ei osa Rovo-lähdetekstiä.
