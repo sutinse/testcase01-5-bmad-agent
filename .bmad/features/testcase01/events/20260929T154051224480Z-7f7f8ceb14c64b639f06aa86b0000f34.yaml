@@ -1,0 +1,8 @@
+schemaVersion: 1
+feature: testcase01
+stage: planning
+action: changes_requested
+pr: 19
+headSha: 9d4ed6acd5907dd26d122925fa65adeda0b038f3
+reviewer: sutinse1
+reviewedAt: '2026-09-29T15:38:44Z'
