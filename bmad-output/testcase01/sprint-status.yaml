@@ -29,7 +29,9 @@ stories:
     owned_scope:
       - app/pom.xml
       - app/src/main/resources/application.properties
+      - app/src/main/java/**/refundapproval/security/ValidatedClaimsGuard.java
       - app/src/test/java/**/refundapproval/security/LocalJwtValidationTest.java
+      - app/src/test/java/**/refundapproval/security/TestClaimsResource.java
       - app/src/test/java/**/refundapproval/security/TestTokenFactory.java
   - id: 1.1.sqlite-schema
     title: SQLite-skeema

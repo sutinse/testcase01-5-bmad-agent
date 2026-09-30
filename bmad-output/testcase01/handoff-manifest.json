@@ -14,7 +14,9 @@
       "ownedScope": [
         "app/pom.xml",
         "app/src/main/resources/application.properties",
+        "app/src/main/java/**/refundapproval/security/ValidatedClaimsGuard.java",
         "app/src/test/java/**/refundapproval/security/LocalJwtValidationTest.java",
+        "app/src/test/java/**/refundapproval/security/TestClaimsResource.java",
         "app/src/test/java/**/refundapproval/security/TestTokenFactory.java"
       ],
       "wave": 1,
@@ -23,7 +25,7 @@
       "acceptanceCriteriaSummary": [
         "Quarkus-runko sisältää REST/JSON-, JDBC/SQLite-, Flyway-, SmallRye JWT- ja JSON-lokitusriippuvuudet.",
         "Testitokenin allekirjoitus, iss, aud ja voimassa oleva exp varmennetaan ennen liiketoimintavastausta.",
-        "Roolit tulevat validoidusta kartoituksesta ja sub on myöhempien tarinoiden käytettävissä."
+        "Validoitujen sub/groups-väitteiden sisältötarkistus estää tyhjät arvot 401-virheenä; väärä rooli on 403."
       ],
       "lockedSectionsNote": "Sections Acceptance Criteria, Dev Notes, and Testing are LOCKED. External dev tools must not edit them. Populate only the Dev Agent Record section.",
       "devAgentRecord": null
