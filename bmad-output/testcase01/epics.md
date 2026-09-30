@@ -4,6 +4,9 @@
 > toteutukseen. Lähteet: [hyväksytty PRD](prd.md), [arkkitehtuuri](architecture.md)
 > ja [päätösloki](decision-log.md). EPIC-tunnukset seuraavat PRD:n hahmotelmaa.
 
+Kaikki 12 tarinaa kuuluvat samaan uuteen suunnittelun hyväksyntäkierrokseen;
+toteutus odottaa hyväksynnän kirjaamista porttiin.
+
 ## Epic 1: Lähetys ja kertymä (EPIC-001)
 
 **Goal:** Käsittelijä tallentaa kokonaisen EUR-palautuksen ja saa järjestyksessä
