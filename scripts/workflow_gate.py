@@ -10,6 +10,8 @@ import subprocess
 import sys
 import uuid
 from datetime import datetime, timezone
+from fnmatch import fnmatchcase
+from functools import cache
 from pathlib import Path
 
 import yaml
@@ -340,6 +342,28 @@ def unchanged_event_history(base_ref):
             raise GateError(f"Existing event modified or deleted: {line}")
 
 
+def in_owned_scope(path, owned):
+    owned = owned.rstrip("/")
+    if not any(char in owned for char in "*?["):
+        return path == owned or path.startswith(owned + "/")
+
+    path_parts = path.split("/")
+    scope_parts = owned.split("/")
+
+    @cache
+    def matches(path_index, scope_index):
+        if scope_index == len(scope_parts):
+            return path_index == len(path_parts)
+        if scope_parts[scope_index] == "**":
+            return (matches(path_index, scope_index + 1) or
+                    (path_index < len(path_parts) and matches(path_index + 1, scope_index)))
+        return (path_index < len(path_parts) and
+                fnmatchcase(path_parts[path_index], scope_parts[scope_index]) and
+                matches(path_index + 1, scope_index + 1))
+
+    return matches(0, 0)
+
+
 def validate_code_changes(base_ref, repo, require_protection=True):
     changed = [path.replace("\\", "/") for path in
                run("git", "diff", "--name-only", f"{base_ref}...HEAD", "--", "app").splitlines()]
@@ -356,8 +380,7 @@ def validate_code_changes(base_ref, repo, require_protection=True):
             for story in json.loads(manifest.read_text(encoding="utf-8"))["stories"]:
                 scopes.update(story["ownedScope"])
     for path in changed:
-        if not any(path == owned.rstrip("/") or path.startswith(owned.rstrip("/") + "/")
-                   for owned in scopes):
+        if not any(in_owned_scope(path, owned) for owned in scopes):
             raise GateError(f"Application change outside approved ready story scope: {path}")
 
 
