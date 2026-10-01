@@ -227,6 +227,34 @@ class WorkflowGateTests(unittest.TestCase):
             with self.assertRaisesRegex(gate.GateError, "no approved planning feature"):
                 gate.validate_code_changes("origin/main", "org/repo")
 
+    def test_application_change_matches_approved_glob_but_not_other_files(self):
+        feature = self.root / ".bmad/features/sample"
+        feature.mkdir(parents=True)
+        manifest = self.root / "bmad-output/sample/handoff-manifest.json"
+        manifest.write_text(json.dumps({"stories": [{"ownedScope": [
+            "app/src/main/java/**/refundapproval/security/ValidatedClaimsGuard.java"
+        ]}]}))
+        with (patch.object(gate, "approvals", return_value={"planning": True}),
+              patch.object(gate, "check"),
+              patch.object(gate, "run", return_value=
+                           "app/src/main/java/io/github/sutinse/refundapproval/security/ValidatedClaimsGuard.java")):
+            gate.validate_code_changes("origin/main", "org/repo")
+        with (patch.object(gate, "approvals", return_value={"planning": True}),
+              patch.object(gate, "check"),
+              patch.object(gate, "run", return_value=
+                           "app/src/main/java/io/github/sutinse/refundapproval/security/Unreviewed.java")):
+            with self.assertRaisesRegex(gate.GateError, "outside approved ready story scope"):
+                gate.validate_code_changes("origin/main", "org/repo")
+        manifest.write_text(json.dumps({"stories": [{"ownedScope": [
+            "app/src/main/java/*/refundapproval/security/ValidatedClaimsGuard.java"
+        ]}]}))
+        with (patch.object(gate, "approvals", return_value={"planning": True}),
+              patch.object(gate, "check"),
+              patch.object(gate, "run", return_value=
+                           "app/src/main/java/io/github/sutinse/refundapproval/security/ValidatedClaimsGuard.java")):
+            with self.assertRaisesRegex(gate.GateError, "outside approved ready story scope"):
+                gate.validate_code_changes("origin/main", "org/repo")
+
 
 if __name__ == "__main__":
     unittest.main()
